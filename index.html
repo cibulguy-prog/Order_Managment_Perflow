@@ -186,17 +186,39 @@ td.editing .cell-input{display:block;}
 .login-btn:hover{background:#2a5ce0;}
 .login-err{font-size:12px;color:var(--danger);margin-top:8px;min-height:16px;}
  
-/* שולם - כחול */
-.step-btn.paid-done{background:rgba(59,110,245,0.15)!important;border-color:rgba(59,110,245,0.4)!important;color:var(--accent)!important;}
+/* סטטוס שורה */
+tbody tr.row-סגור td{background:rgba(0,184,150,0.06);}
+tbody tr.row-סגור:hover td{background:rgba(0,184,150,0.11);}
+tbody tr.row-בוטל td{background:rgba(232,50,79,0.05);}
+tbody tr.row-בוטל:hover td{background:rgba(232,50,79,0.09);}
+tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
  
-/* אינדיקטור שולם */
-.paid-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.paid-badge.paid-yes{background:rgba(59,110,245,0.12);color:var(--accent);border:1px solid rgba(59,110,245,0.3);}
-.paid-badge.paid-no{background:rgba(232,50,79,0.08);color:var(--danger);border:1px solid rgba(232,50,79,0.2);}
-.paid-badge::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.paid-badge.paid-yes::before{background:var(--accent);}
-.paid-badge.paid-no::before{background:var(--danger);}
-.paid-cell{text-align:center;padding:0 6px;}
+/* דשבורד */
+.dashboard{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;min-width:180px;}
+.dash-donut{position:relative;width:48px;height:48px;flex-shrink:0;}
+.dash-donut canvas{display:block;}
+.dash-donut-total{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text);}
+.dash-info{flex:1;}
+.dash-project{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.dash-legend{display:flex;flex-direction:column;gap:2px;}
+.dash-legend-item{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px;}
+.dash-legend-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+ 
+/* sort */
+.col-sort,.req-sort{cursor:pointer;user-select:none;}
+.col-sort:hover,.req-sort:hover{background:var(--surface3)!important;}
+.sort-arrow{font-size:9px;color:var(--text3);margin-right:2px;}
+.sort-arrow.asc::after{content:'↑';}
+.sort-arrow.desc::after{content:'↓';}
+ 
+/* scrollbar עבה */
+.tbl-wrap::-webkit-scrollbar{height:10px;}
+.tbl-wrap::-webkit-scrollbar-track{background:var(--surface3);border-radius:5px;}
+.tbl-wrap::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.3);border-radius:5px;}
+.tbl-wrap::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.5);}
+ 
+#closed-wrap{margin-bottom:1.5rem;}
 </style>
 </head>
 <body>
@@ -259,14 +281,30 @@ td.editing .cell-input{display:block;}
       <span class="section-badge badge-purple" id="req-count-badge">0</span>
     </div>
   </div>
+  <div class="toolbar" style="margin-bottom:0.75rem;">
+    <div class="filters" id="req-filters">
+      <button class="pill active" data-filter="all">הכל</button>
+      <button class="pill" data-filter="approved">מאושר</button>
+      <button class="pill" data-filter="unapproved">ממתין</button>
+    </div>
+    <div class="search-box">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5L14 14"></path></svg>
+      <input type="text" id="req-search" placeholder="חיפוש לפי מבקש, פרויקט, ספק...">
+    </div>
+  </div>
   <div class="table-card">
     <div class="tbl-wrap">
       <table class="req-table">
         <thead>
           <tr>
-            <th style="width:140px">שם המבקש</th><th style="width:110px">פרויקט</th><th>תיאור כללי</th>
-            <th style="width:130px">ספק</th><th style="width:120px">מס' הצ"מ</th><th style="width:90px">סכום</th>
-            <th style="width:80px;text-align:center">מטבע</th><th style="width:90px;text-align:center">אישור לקוח</th>
+            <th class="req-sort" data-col="requester" style="width:140px">שם המבקש <span class="sort-arrow"></span></th>
+            <th class="req-sort" data-col="project" style="width:110px">פרויקט <span class="sort-arrow"></span></th>
+            <th class="req-sort" data-col="desc">תיאור כללי <span class="sort-arrow"></span></th>
+            <th class="req-sort" data-col="vendor" style="width:130px">ספק <span class="sort-arrow"></span></th>
+            <th class="req-sort" data-col="quoteNum" style="width:120px">מס' הצ"מ <span class="sort-arrow"></span></th>
+            <th class="req-sort" data-col="amount" style="width:90px">סכום <span class="sort-arrow"></span></th>
+            <th style="width:80px;text-align:center">מטבע</th>
+            <th style="width:90px;text-align:center">אישור לקוח</th>
             <th style="width:80px;text-align:center">טופל</th><th style="width:60px"></th>
           </tr>
         </thead>
@@ -291,42 +329,60 @@ td.editing .cell-input{display:block;}
     </div>
   </div>
  
+  <!-- דשבורד פרויקטים -->
   <div class="section-header">
     <div class="section-title"><span>📦</span> הזמנות<span class="section-badge badge-blue" id="orders-count-badge">0</span></div>
   </div>
-  <div class="stats" id="stats"></div>
+  <div id="dashboard" class="dashboard"></div>
+ 
+  <!-- כלים -->
   <div class="toolbar">
     <div class="filters" id="filters">
       <button class="pill active" data-filter="all">הכל</button>
       <button class="pill" data-filter="פתוח">פתוח</button>
-      <button class="pill" data-filter="התקבל">התקבל</button>
-      <button class="pill" data-filter="בדרך">בדרך</button>
-      <button class="pill" data-filter="עיכוב">עיכוב</button>
-      <button class="pill" data-filter="חלקי">חלקי</button>
+      <button class="pill" data-filter="סגור">סגור</button>
+      <button class="pill" data-filter="בוטל">בוטל</button>
     </div>
     <div class="search-box">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"></circle><path d="M10.5 10.5L14 14"></path></svg>
-      <input type="text" id="search" placeholder="חיפוש לפי PO, ספק, פרויקט...">
+      <input type="text" id="search" placeholder="חיפוש לפי PO, ספק, פרויקט, תיאור...">
     </div>
   </div>
+ 
+  <!-- טבלת הזמנות פעילות -->
   <div class="table-card">
     <div class="tbl-wrap">
-      <table id="orders-table" class="orders-tbl" style="min-width:1600px">
+      <table id="orders-table" class="orders-tbl" style="min-width:1800px">
         <thead>
           <tr>
-            <th colspan="5" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
-            <th colspan="6" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
-            <th colspan="5" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
-            <th colspan="5" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
+            <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
+            <th colspan="2" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
+            <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
+            <th colspan="4" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
+            <th style="background:var(--surface2)"></th>
           </tr>
           <tr>
-            <th style="min-width:120px">PO</th><th style="min-width:100px">ספק</th><th>תיאור</th><th>פרויקט</th><th>סכום</th>
-            <th style="border-right:1px solid rgba(59,110,245,0.15)">הצעת מחיר</th>
-            <th>אישור עלות</th><th>הוספה לכרטיס</th><th>הוצאת PO</th><th>שליחה לספק</th><th>מעקב תאריך</th>
-            <th style="border-right:1px solid rgba(0,184,150,0.15)">תיאום משלוח</th>
-            <th>אישור עלות משלוח</th><th>הוספה לכרטיס</th><th>מעקב משלוח</th><th>מספר מעקב</th>
-            <th style="border-right:1px solid rgba(232,150,10,0.15)">התקבל</th>
-            <th>QC</th><th>שולם</th><th>התקדמות</th><th>סטטוס</th><th></th>
+            <th class="col-sort" data-col="po" style="min-width:130px">PO <span class="sort-arrow"></span></th>
+            <th class="col-sort" data-col="vendor" style="min-width:110px">ספק <span class="sort-arrow"></span></th>
+            <th class="col-sort" data-col="quoteNum" style="min-width:110px">מס הצעה <span class="sort-arrow"></span></th>
+            <th class="col-sort" data-col="desc" style="min-width:140px">תיאור <span class="sort-arrow"></span></th>
+            <th class="col-sort" data-col="project" style="min-width:100px">פרויקט <span class="sort-arrow"></span></th>
+            <th class="col-sort" data-col="pm" style="min-width:110px">מנהל פרויקט <span class="sort-arrow"></span></th>
+            <th style="min-width:90px">סכום</th>
+            <th style="min-width:70px;text-align:center">מטבע</th>
+            <th style="min-width:80px;text-align:center;border-right:1px solid rgba(59,110,245,0.15)">אישור לקוח</th>
+            <th style="min-width:80px;text-align:center">שליחה לספק</th>
+            <th style="min-width:110px;text-align:center;border-right:1px solid rgba(0,184,150,0.15)">תאריך אספקה</th>
+            <th style="min-width:110px;text-align:center">משלוח באחריות</th>
+            <th style="min-width:90px">עלות משלוח</th>
+            <th style="min-width:70px;text-align:center">מטבע</th>
+            <th style="min-width:80px;text-align:center">אישור לקוח</th>
+            <th style="min-width:130px;border-right:1px solid rgba(232,150,10,0.15)">מספר מעקב</th>
+            <th style="min-width:80px;text-align:center">התקבל</th>
+            <th style="min-width:60px;text-align:center">QC</th>
+            <th style="min-width:140px">הערות</th>
+            <th class="col-sort" data-col="status" style="min-width:90px;text-align:center">סטטוס <span class="sort-arrow"></span></th>
+            <th style="min-width:50px"></th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -337,6 +393,45 @@ td.editing .cell-input{display:block;}
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>
       הוסף הזמנה חדשה
     </button>
+  </div>
+ 
+  <!-- הזמנות סגורות -->
+  <div id="closed-wrap">
+    <button class="archive-toggle open" id="closed-toggle-btn">
+      <span class="arrow">▼</span><span>הזמנות סגורות / בוטלו</span>
+      <span class="section-badge badge-gray" id="closed-count-badge" style="margin-right:auto">0</span>
+    </button>
+    <div class="archive-section" id="closed-body" style="display:block">
+      <div class="tbl-wrap">
+        <table class="orders-tbl" style="min-width:1800px">
+          <thead>
+            <tr>
+              <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
+              <th colspan="2" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
+              <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
+              <th colspan="4" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
+              <th style="background:var(--surface2)"></th>
+            </tr>
+            <tr>
+              <th style="min-width:130px">PO</th><th style="min-width:110px">ספק</th><th style="min-width:110px">מס הצעה</th>
+              <th style="min-width:140px">תיאור</th><th style="min-width:100px">פרויקט</th><th style="min-width:110px">מנהל פרויקט</th>
+              <th style="min-width:90px">סכום</th><th style="min-width:70px;text-align:center">מטבע</th>
+              <th style="min-width:80px;text-align:center;border-right:1px solid rgba(59,110,245,0.15)">אישור לקוח</th>
+              <th style="min-width:80px;text-align:center">שליחה לספק</th>
+              <th style="min-width:110px;text-align:center;border-right:1px solid rgba(0,184,150,0.15)">תאריך אספקה</th>
+              <th style="min-width:110px;text-align:center">משלוח באחריות</th>
+              <th style="min-width:90px">עלות משלוח</th><th style="min-width:70px;text-align:center">מטבע</th>
+              <th style="min-width:80px;text-align:center">אישור לקוח</th>
+              <th style="min-width:130px;border-right:1px solid rgba(232,150,10,0.15)">מספר מעקב</th>
+              <th style="min-width:80px;text-align:center">התקבל</th><th style="min-width:60px;text-align:center">QC</th>
+              <th style="min-width:140px">הערות</th>
+              <th style="min-width:90px;text-align:center">סטטוס</th><th style="min-width:50px"></th>
+            </tr>
+          </thead>
+          <tbody id="closed-tbody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </main>
  
@@ -351,27 +446,11 @@ td.editing .cell-input{display:block;}
 <script>
 var GS_URL = 'https://script.google.com/macros/s/AKfycbzRAuF--VGlgVX_r62YlgAVqopxxZMoFrp6X9xlrHm2OjUI71CFuOXt_SISUgldxO-H6A/exec';
  
-var STEPS = [
-  {id:'quotation',label:'הצעת מחיר'},{id:'approveCost',label:'אישור עלות עם לקוח'},
-  {id:'addToCard1',label:'הוספה לכרטיס חיוב'},{id:'issuePO',label:'הוצאת PO'},
-  {id:'sendPO',label:'שליחה לספק'},{id:'followDate',label:'מעקב תאריך מסירה'},
-  {id:'coordShip',label:'תיאום משלוח'},{id:'approveShip',label:'אישור עלות משלוח'},
-  {id:'addToCard2',label:'הוספה לכרטיס משלוח'},{id:'followShip',label:'מעקב משלוח'},
-  {id:'arrived',label:'חלקים הגיעו'},{id:'qc',label:'QC בוצע'}
-];
  
-function emptySteps(){var s={};STEPS.forEach(function(st){s[st.id]=false;});return s;}
  
-var reqs=[],activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=false;
-var orders=[
-  {id:1,po:'PO25000111',vendor:'RION',desc:'handles',project:'RBY',amount:'3,000 $',tracking:'889424863870',notes:'חיוב חלקי, סהכ 7000',status:'התקבל',
-    steps:{quotation:true,approveCost:true,addToCard1:true,issuePO:true,sendPO:true,followDate:true,coordShip:true,approveShip:true,addToCard2:true,followShip:true,arrived:true,qc:true}},
-  {id:2,po:'PO25000111',vendor:'RION',desc:'handles (יתרה)',project:'RBY',amount:'4,000 ₪',tracking:'889424863870',notes:'חיוב חלקי',status:'התקבל',
-    steps:{quotation:true,approveCost:true,addToCard1:true,issuePO:true,sendPO:true,followDate:true,coordShip:true,approveShip:true,addToCard2:true,followShip:true,arrived:true,qc:true}},
-  {id:3,po:'RBY 2026008-1',vendor:'Harland',desc:'ציפוי 13 יחידות',project:'RBY',amount:'',tracking:'889424863870',notes:'משלוח 13 יחידות',status:'התקבל',
-    steps:{quotation:true,approveCost:true,addToCard1:false,issuePO:true,sendPO:true,followDate:true,coordShip:true,approveShip:true,addToCard2:true,followShip:true,arrived:true,qc:true}},
-];
-var rNid=1,nid=4;
+var reqs=[],activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=false,closedOpen=true;
+var orders=[];
+var rNid=1,nid=1;
  
  
 // ── SYNC STATUS ──
@@ -384,9 +463,7 @@ function setSyncStatus(state,msg){
 function saveOrders(){
   setSyncStatus('syncing','שומר...');
   var flat=orders.map(function(o){
-    var row={id:o.id,po:o.po,vendor:o.vendor,desc:o.desc,project:o.project,amount:o.amount,tracking:o.tracking,notes:o.notes||'',paid:o.paid?'1':'0',status:o.status};
-    STEPS.forEach(function(s){row[s.id]=o.steps[s.id]?'1':'0';});
-    return row;
+    return {id:o.id,po:o.po,vendor:o.vendor,quoteNum:o.quoteNum||'',desc:o.desc,project:o.project,pm:o.pm||'',amount:o.amount,currency:o.currency||'₪',clientApproval:o.clientApproval?'1':'0',sentToVendor:o.sentToVendor?'1':'0',deliveryDate:o.deliveryDate||'',shipResp:o.shipResp||'',shipCost:o.shipCost||'',shipCurrency:o.shipCurrency||'₪',shipClientApproval:o.shipClientApproval?'1':'0',tracking:o.tracking||'',arrived:o.arrived?'1':'0',qc:o.qc?'1':'0',notes:o.notes||'',status:o.status||'פתוח'};
   });
   fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_all',orders:flat})})
     .then(function(r){return r.json();})
@@ -409,8 +486,7 @@ function loadAll(silent){
     .then(function(d){
       if(Array.isArray(d)&&d.length){
         orders=d.map(function(r){
-          var steps={};STEPS.forEach(function(s){steps[s.id]=r[s.id]==='1';});
-          return {id:Number(r.id)||0,po:r.po||'',vendor:r.vendor||'',desc:r.desc||'',project:r.project||'',amount:r.amount||'',tracking:r.tracking||'',notes:r.notes||'',status:r.status||'פתוח',paid:r.paid==='1',steps:steps};
+          return {id:Number(r.id)||0,po:r.po||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',desc:r.desc||'',project:r.project||'',pm:r.pm||'',amount:r.amount||'',currency:r.currency||'₪',clientApproval:r.clientApproval==='1',sentToVendor:r.sentToVendor==='1',deliveryDate:r.deliveryDate||'',shipResp:r.shipResp||'',shipCost:r.shipCost||'',shipCurrency:r.shipCurrency||'₪',shipClientApproval:r.shipClientApproval==='1',tracking:r.tracking||'',arrived:r.arrived==='1',qc:r.qc==='1',notes:r.notes||'',status:r.status||'פתוח'};
         });
         var ids=orders.map(function(o){return o.id||0;});
         nid=ids.length?Math.max.apply(null,ids)+1:1;
@@ -519,8 +595,31 @@ function buildReqRow(r){
   delTd.appendChild(delBtn);tr.appendChild(delTd);return tr;
 }
  
+var reqSortCol=null,reqSortDir=1,reqFilter='all';
+ 
+function applyReqSort(list){
+  if(!reqSortCol)return list;
+  return list.slice().sort(function(a,b){
+    var av=a[reqSortCol]||'',bv=b[reqSortCol]||'';
+    return av.localeCompare(bv,'he')*reqSortDir;
+  });
+}
+ 
 function renderReqs(){
-  var active=reqs.filter(function(r){return !r.handled;}),archived=reqs.filter(function(r){return r.handled;});
+  var q=(document.getElementById('req-search')||{value:''}).value.toLowerCase();
+  var active=reqs.filter(function(r){return !r.handled;});
+  var archived=reqs.filter(function(r){return r.handled;});
+ 
+  // filter
+  if(reqFilter==='approved') active=active.filter(function(r){return r.approved;});
+  else if(reqFilter==='unapproved') active=active.filter(function(r){return !r.approved;});
+ 
+  // search
+  if(q) active=active.filter(function(r){return (r.requester+' '+r.project+' '+r.vendor+' '+r.desc+' '+(r.quoteNum||'')).toLowerCase().indexOf(q)!==-1;});
+ 
+  // sort
+  active=applyReqSort(active);
+ 
   document.getElementById('req-count-badge').textContent=active.length;
   document.getElementById('archive-count-badge').textContent=archived.length;
   var tbody=document.getElementById('req-tbody'),em=document.getElementById('req-empty');
@@ -543,69 +642,123 @@ document.getElementById('archive-toggle-btn').addEventListener('click',function(
   document.getElementById('archive-toggle-btn').classList.toggle('open',archiveOpen);
 });
  
-// ── ORDERS ──
-function getProgress(o){return Math.round(STEPS.filter(function(s){return o.steps[s.id];}).length/STEPS.length*100);}
+// סינון דרישות רכש
+document.getElementById('req-filters').addEventListener('click',function(e){
+  var btn=e.target.closest('.pill');if(!btn)return;
+  document.querySelectorAll('#req-filters .pill').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  reqFilter=btn.getAttribute('data-filter');
+  renderReqs();
+});
  
-function renderStats(){
-  var t=orders.length,done=orders.filter(function(o){return o.status==='התקבל';}).length,
-      inT=orders.filter(function(o){return o.status==='בדרך';}).length,
-      del=orders.filter(function(o){return o.status==='עיכוב';}).length,
-      op=orders.filter(function(o){return o.status==='פתוח';}).length,
-      avg=t?Math.round(orders.reduce(function(a,o){return a+getProgress(o);},0)/t):0;
-  document.getElementById('orders-count-badge').textContent=t;
-  var paid=orders.filter(function(o){return o.paid;}).length,unpaid=t-paid;
-  document.getElementById('stats').innerHTML=
-    '<div class="stat"><div class="stat-label">סה"כ הזמנות</div><div class="stat-value">'+t+'</div></div>'+
-    '<div class="stat"><div class="stat-label">פתוחות</div><div class="stat-value accent">'+op+'</div></div>'+
-    '<div class="stat"><div class="stat-label">התקבלו</div><div class="stat-value success">'+done+'</div></div>'+
-    '<div class="stat"><div class="stat-label">בדרך</div><div class="stat-value warn">'+inT+'</div></div>'+
-    '<div class="stat"><div class="stat-label">עיכובים</div><div class="stat-value danger">'+del+'</div></div>'+
-    '<div class="stat"><div class="stat-label">שולם ✓</div><div class="stat-value accent">'+paid+'</div></div>'+
-    '<div class="stat"><div class="stat-label">טרם שולם</div><div class="stat-value danger">'+unpaid+'</div></div>'+
-    '<div class="stat"><div class="stat-label">ממוצע התקדמות</div><div class="stat-value">'+avg+'%</div></div>';
+// חיפוש דרישות רכש
+document.getElementById('req-search').addEventListener('input',renderReqs);
+ 
+// מיון דרישות רכש
+document.querySelector('.req-table').addEventListener('click',function(e){
+  var th=e.target.closest('.req-sort');if(!th)return;
+  var col=th.getAttribute('data-col');
+  if(reqSortCol===col){reqSortDir*=-1;}else{reqSortCol=col;reqSortDir=1;}
+  document.querySelectorAll('.req-table .sort-arrow').forEach(function(a){a.className='sort-arrow';});
+  var arrow=th.querySelector('.sort-arrow');if(arrow)arrow.className='sort-arrow '+(reqSortDir===1?'asc':'desc');
+  renderReqs();
+});
+ 
+// ── ORDERS ──
+var sortCol=null,sortDir=1,closedOpen=true;
+ 
+function drawDonut(canvas,open,closed,cancelled){
+  var ctx=canvas.getContext('2d');
+  var total=open+closed+cancelled||1;
+  var segs=[
+    {val:open,color:'#3b6ef5'},
+    {val:closed,color:'#00b896'},
+    {val:cancelled,color:'#e8324f'}
+  ];
+  ctx.clearRect(0,0,48,48);
+  var start=-Math.PI/2,cx=24,cy=24,r=20,ir=13;
+  segs.forEach(function(s){
+    if(!s.val)return;
+    var angle=s.val/total*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,start+angle);
+    ctx.closePath();ctx.fillStyle=s.color;ctx.fill();
+    start+=angle;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);
+  ctx.fillStyle='#fff';ctx.fill();
+}
+ 
+function renderDashboard(){
+  var projects={};
+  orders.forEach(function(o){
+    var p=o.project||'ללא פרויקט';
+    if(!projects[p])projects[p]={open:0,closed:0,cancelled:0};
+    if(o.status==='סגור')projects[p].closed++;
+    else if(o.status==='בוטל')projects[p].cancelled++;
+    else projects[p].open++;
+  });
+  var dash=document.getElementById('dashboard');
+  dash.innerHTML='';
+  Object.keys(projects).forEach(function(p){
+    var d=projects[p];
+    var total=d.open+d.closed+d.cancelled;
+    var card=document.createElement('div');card.className='dash-card';
+    var donutWrap=document.createElement('div');donutWrap.className='dash-donut';
+    var canvas=document.createElement('canvas');canvas.width=48;canvas.height=48;
+    var totalSpan=document.createElement('div');totalSpan.className='dash-donut-total';totalSpan.textContent=total;
+    donutWrap.appendChild(canvas);donutWrap.appendChild(totalSpan);
+    setTimeout(function(){drawDonut(canvas,d.open,d.closed,d.cancelled);},0);
+    var info=document.createElement('div');info.className='dash-info';
+    info.innerHTML='<div class="dash-project">'+p+'</div><div class="dash-legend">'+
+      (d.open?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#3b6ef5"></span>פתוח: '+d.open+'</div>':'')+
+      (d.closed?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#00b896"></span>סגור: '+d.closed+'</div>':'')+
+      (d.cancelled?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#e8324f"></span>בוטל: '+d.cancelled+'</div>':'')+
+      '</div>';
+    card.appendChild(donutWrap);card.appendChild(info);dash.appendChild(card);
+  });
 }
  
 function buildOrderRow(o){
-  var pct=getProgress(o),tr=document.createElement('tr');
+  var tr=document.createElement('tr');
   tr.className='row-'+(o.status||'פתוח');
  
-  [{val:o.po,ph:'PO',key:'po'},{val:o.vendor,ph:'ספק',key:'vendor'},{val:o.desc,ph:'תיאור',key:'desc'},{val:o.project,ph:'פרויקט',key:'project'},{val:o.amount,ph:'סכום',key:'amount'}]
-  .forEach(function(f,i){
-    var td=makeEditCell(f.val,f.ph,function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord[f.key]=v;saveOrders();}},'#tbody');
-    if(i===0){var sp=td.querySelector('.cell-text');sp.style.cssText='display:block;width:100%;min-height:44px;padding:0 10px;line-height:44px;font-weight:600;font-size:12px;font-family:Courier New,monospace;color:var(--accent);';}
-    tr.appendChild(td);
+  // PO - מונוספייס כחול
+  var poTd=makeEditCell(o.po,'PO',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.po=v;saveOrders();}},'#tbody,#closed-tbody');
+  poTd.querySelector('.cell-text').style.cssText='display:block;width:100%;min-height:44px;padding:0 10px;line-height:44px;font-weight:700;font-size:12px;font-family:Courier New,monospace;color:var(--accent);';
+  tr.appendChild(poTd);
+ 
+  // שדות טקסט רגילים
+  [{val:o.vendor,ph:'ספק',key:'vendor'},{val:o.quoteNum,ph:'מס הצעה',key:'quoteNum'},{val:o.desc,ph:'תיאור',key:'desc'},{val:o.project,ph:'פרויקט',key:'project'},{val:o.pm,ph:'מנהל פרויקט',key:'pm'},{val:o.amount,ph:'סכום',key:'amount'}]
+  .forEach(function(f){
+    tr.appendChild(makeEditCell(f.val,f.ph,function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord[f.key]=v;saveOrders();renderDashboard();}},'#tbody,#closed-tbody'));
   });
  
-  STEPS.forEach(function(s){
-    var td=document.createElement('td');td.className='step-cell';
-    var btn=document.createElement('button');btn.className='step-btn'+(o.steps[s.id]?' done':'');btn.title=s.label;
-    btn.addEventListener('click',(function(oid,sid){return function(){var ord=orders.find(function(x){return x.id===oid;});if(ord){ord.steps[sid]=!ord.steps[sid];saveOrders();renderTable();}};})(o.id,s.id));
-    td.appendChild(btn);tr.appendChild(td);
-  });
+  // מטבע
+  tr.appendChild(makeSelectCell(o.currency||'₪',['₪','$','€'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.currency=v;saveOrders();}}));
  
-  // תא שולם - אינדיקטור ויזואלי + toggle
-  var paidTd=document.createElement('td');paidTd.className='paid-cell';
-  var paidWrap=document.createElement('div');paidWrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 6px;';
-  var paidBadge=document.createElement('span');
-  paidBadge.className='paid-badge '+(o.paid?'paid-yes':'paid-no');
-  paidBadge.textContent=o.paid?'שולם':'לא שולם';
-  var paidBtn=document.createElement('button');paidBtn.className='step-btn paid-btn'+(o.paid?' done paid-done':'');paidBtn.title='לחץ לשינוי';paidBtn.style.cssText='width:22px;height:22px;font-size:10px;';
-  if(o.paid){paidBtn.style.background='rgba(59,110,245,0.15)';paidBtn.style.borderColor='rgba(59,110,245,0.4)';}
-  paidBtn.addEventListener('click',(function(oid){return function(){
-    var ord=orders.find(function(x){return x.id===oid;});
-    if(ord){
-      ord.paid=!ord.paid;
-      paidBadge.className='paid-badge '+(ord.paid?'paid-yes':'paid-no');
-      paidBadge.textContent=ord.paid?'שולם':'לא שולם';
-      paidBtn.className='step-btn paid-btn'+(ord.paid?' done paid-done':'');
-      paidBtn.style.background=ord.paid?'rgba(59,110,245,0.15)':'';
-      paidBtn.style.borderColor=ord.paid?'rgba(59,110,245,0.4)':'';
-      saveOrders();renderStats();
-    }
-  };})(o.id));
-  paidWrap.appendChild(paidBadge);paidWrap.appendChild(paidBtn);paidTd.appendChild(paidWrap);tr.appendChild(paidTd);
+  // אישור לקוח
+  tr.appendChild(makeStepBtn(o.clientApproval,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.clientApproval=!ord.clientApproval;btn.className='step-btn'+(ord.clientApproval?' done':'');saveOrders();}));
  
-  // מספר מעקב + כפתור העתק
+  // שליחה לספק
+  tr.appendChild(makeStepBtn(o.sentToVendor,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.sentToVendor=!ord.sentToVendor;btn.className='step-btn'+(ord.sentToVendor?' done':'');saveOrders();}));
+ 
+  // תאריך אספקה
+  tr.appendChild(makeEditCell(o.deliveryDate,'DD/MM/YYYY',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.deliveryDate=v;saveOrders();}},'#tbody,#closed-tbody'));
+ 
+  // משלוח באחריות
+  tr.appendChild(makeSelectCell(o.shipResp||'',['','ספק','פרפלאו','הלקוח'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipResp=v;saveOrders();}}));
+ 
+  // עלות משלוח
+  tr.appendChild(makeEditCell(o.shipCost,'עלות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipCost=v;saveOrders();}},'#tbody,#closed-tbody'));
+ 
+  // מטבע משלוח
+  tr.appendChild(makeSelectCell(o.shipCurrency||'₪',['₪','$','€'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipCurrency=v;saveOrders();}}));
+ 
+  // אישור לקוח משלוח
+  tr.appendChild(makeStepBtn(o.shipClientApproval,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.shipClientApproval=!ord.shipClientApproval;btn.className='step-btn'+(ord.shipClientApproval?' done':'');saveOrders();}));
+ 
+  // מספר מעקב + העתק
   var trTd=document.createElement('td');
   var wrap=document.createElement('div');wrap.className='tracking-wrap';
   var tval=document.createElement('span');tval.className='tracking-val'+(o.tracking?'':' ph');tval.textContent=o.tracking||'הוסף...';
@@ -621,12 +774,19 @@ function buildOrderRow(o){
   tinp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key==='Escape')tinp.blur();});
   wrap.appendChild(tval);wrap.appendChild(tinp);wrap.appendChild(cpBtn);trTd.appendChild(wrap);tr.appendChild(trTd);
  
-  var prTd=document.createElement('td');
-  prTd.innerHTML='<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div><div class="progress-label">'+pct+'%</div></div>';
-  tr.appendChild(prTd);
+  // התקבל
+  tr.appendChild(makeStepBtn(o.arrived,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.arrived=!ord.arrived;btn.className='step-btn'+(ord.arrived?' done':'');saveOrders();}));
  
-  tr.appendChild(makeSelectCell(o.status||'פתוח',['פתוח','בדרך','חלקי','התקבל','עיכוב'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.status=v;saveOrders();renderAll();}}));
+  // QC
+  tr.appendChild(makeStepBtn(o.qc,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.qc=!ord.qc;btn.className='step-btn'+(ord.qc?' done':'');saveOrders();}));
  
+  // הערות
+  tr.appendChild(makeEditCell(o.notes,'הערות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.notes=v;saveOrders();}},"#tbody,#closed-tbody"));
+ 
+  // סטטוס
+  tr.appendChild(makeSelectCell(o.status||'פתוח',['פתוח','סגור','בוטל'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.status=v;saveOrders();renderAll();}}));
+ 
+  // מחיקה
   var acTd=document.createElement('td');
   var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';delBtn.textContent='✕';
   delBtn.addEventListener('click',(function(oid){return function(){showConfirm('האם את/ה בטוח/ה שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){orders=orders.filter(function(x){return x.id!==oid;});saveOrders();renderAll();showToast('הזמנה נמחקה');});}})(o.id));
@@ -635,30 +795,53 @@ function buildOrderRow(o){
 }
  
 function addOrderRow(){
-  var o={id:nid++,po:'',vendor:'',desc:'',project:'',amount:'',tracking:'',notes:'',status:'פתוח',paid:false,steps:emptySteps()};
+  var o={id:nid++,po:'',vendor:'',quoteNum:'',desc:'',project:'',pm:'',amount:'',currency:'₪',clientApproval:false,sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:false,tracking:'',arrived:false,qc:false,notes:'',status:'פתוח'};
   orders.push(o);saveOrders();renderAll();
   setTimeout(function(){var rows=document.querySelectorAll('#tbody tr');var last=rows[rows.length-1];if(last){var inp=last.querySelector('.cell-input');if(inp){last.querySelector('td').classList.add('editing');inp.focus();}}},30);
 }
  
-function renderTable(){
-  var q=document.getElementById('search').value.toLowerCase();
-  var list=activeFilter==='all'?orders:orders.filter(function(o){return o.status===activeFilter;});
-  if(q)list=list.filter(function(o){return (o.po+' '+o.vendor+' '+o.project+' '+o.desc).toLowerCase().indexOf(q)!==-1;});
-  var tbody=document.getElementById('tbody'),em=document.getElementById('empty-msg');
-  tbody.innerHTML='';
-  if(!list.length){em.style.display='block';return;}em.style.display='none';
-  list.forEach(function(o){tbody.appendChild(buildOrderRow(o));});
+function applySort(list){
+  if(!sortCol)return list;
+  return list.slice().sort(function(a,b){
+    var av=a[sortCol]||'',bv=b[sortCol]||'';
+    return av.localeCompare(bv,'he')*sortDir;
+  });
 }
  
-function renderAll(){renderStats();renderTable();renderReqs();}
+function renderTable(){
+  var q=document.getElementById('search').value.toLowerCase();
+  var active=orders.filter(function(o){return o.status!=='סגור'&&o.status!=='בוטל';});
+  var closed=orders.filter(function(o){return o.status==='סגור'||o.status==='בוטל';});
+  if(activeFilter!=='all'){
+    active=active.filter(function(o){return o.status===activeFilter;});
+    closed=closed.filter(function(o){return o.status===activeFilter;});
+  }
+  if(q){
+    var filt=function(o){return (o.po+' '+o.vendor+' '+o.project+' '+o.desc+' '+(o.pm||'')).toLowerCase().indexOf(q)!==-1;};
+    active=active.filter(filt);closed=closed.filter(filt);
+  }
+  active=applySort(active);closed=applySort(closed);
+ 
+  var tbody=document.getElementById('tbody'),em=document.getElementById('empty-msg');
+  tbody.innerHTML='';
+  if(!active.length){em.style.display='block';}else{em.style.display='none';active.forEach(function(o){tbody.appendChild(buildOrderRow(o));});}
+ 
+  var ctbody=document.getElementById('closed-tbody');
+  ctbody.innerHTML='';
+  closed.forEach(function(o){ctbody.appendChild(buildOrderRow(o));});
+  document.getElementById('closed-count-badge').textContent=closed.length;
+  document.getElementById('closed-wrap').style.display=closed.length?'block':'none';
+}
+ 
+function renderAll(){document.getElementById('orders-count-badge').textContent=orders.length;renderDashboard();renderTable();renderReqs();}
  
 function exportXLSX(){
   var rH=['שם המבקש','פרויקט','תיאור כללי','ספק','מס\' הצעת מחיר','סכום','מטבע','אישור לקוח','סטטוס'];
   var rR=reqs.map(function(r){return [r.requester,r.project,r.desc,r.vendor,r.quoteNum||'',r.amount,r.currency||'₪',r.approved?'מאושר':'ממתין',r.handled?'טופל':'פעיל'];});
   var ws1=XLSX.utils.aoa_to_sheet([rH].concat(rR));ws1['!cols']=[{wch:16},{wch:12},{wch:30},{wch:16},{wch:16},{wch:12},{wch:8},{wch:12},{wch:10}];
-  var oH=['PO','ספק','תיאור','פרויקט','סכום','מספר מעקב','סטטוס','שולם','התקדמות %'].concat(STEPS.map(function(s){return s.label;}));
-  var oR=orders.map(function(o){return [o.po,o.vendor,o.desc,o.project,o.amount,o.tracking,o.status,o.paid?'✓':'',getProgress(o)+'%'].concat(STEPS.map(function(s){return o.steps[s.id]?'✓':'';}));});
-  var ws2=XLSX.utils.aoa_to_sheet([oH].concat(oR));ws2['!cols']=[{wch:16},{wch:14},{wch:22},{wch:12},{wch:12},{wch:18},{wch:10},{wch:10}].concat(STEPS.map(function(){return {wch:10};}));
+  var oH=['PO','ספק','מס הצעה','תיאור','פרויקט','מנהל פרויקט','סכום','מטבע','אישור לקוח','שליחה לספק','תאריך אספקה','משלוח באחריות','עלות משלוח','מטבע משלוח','אישור לקוח משלוח','מספר מעקב','התקבל','QC','הערות','סטטוס'];
+  var oR=orders.map(function(o){return [o.po,o.vendor,o.quoteNum||'',o.desc,o.project,o.pm||'',o.amount,o.currency||'₪',o.clientApproval?'✓':'',o.sentToVendor?'✓':'',o.deliveryDate||'',o.shipResp||'',o.shipCost||'',o.shipCurrency||'₪',o.shipClientApproval?'✓':'',o.tracking||'',o.arrived?'✓':'',o.qc?'✓':'',o.notes||'',o.status||'פתוח'];});
+  var ws2=XLSX.utils.aoa_to_sheet([oH].concat(oR));ws2['!cols']=[{wch:16},{wch:14},{wch:14},{wch:22},{wch:12},{wch:14},{wch:10},{wch:8},{wch:10},{wch:10},{wch:12},{wch:12},{wch:12},{wch:8},{wch:10},{wch:18},{wch:8},{wch:8},{wch:20},{wch:10}];
   var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws1,'דרישות רכש');XLSX.utils.book_append_sheet(wb,ws2,'הזמנות');
   XLSX.writeFile(wb,'מעקב_הזמנות_לקוחות.xlsx');showToast('Excel יוצא בהצלחה ✓');
 }
@@ -672,7 +855,23 @@ document.getElementById('search').addEventListener('input',renderTable);
 document.getElementById('filters').addEventListener('click',function(e){
   var btn=e.target.closest('.pill');if(!btn)return;
   document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('active');});btn.classList.add('active');
-  activeFilter=btn.getAttribute('data-filter');renderTable();
+  activeFilter=btn.getAttribute('data-filter');renderAll();
+});
+ 
+// מיון עמודות
+document.getElementById('orders-table').addEventListener('click',function(e){
+  var th=e.target.closest('.col-sort');if(!th)return;
+  var col=th.getAttribute('data-col');
+  if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
+  document.querySelectorAll('.sort-arrow').forEach(function(a){a.className='sort-arrow';});
+  var arrow=th.querySelector('.sort-arrow');if(arrow)arrow.className='sort-arrow '+(sortDir===1?'asc':'desc');
+  renderTable();
+});
+ 
+document.getElementById('closed-toggle-btn').addEventListener('click',function(){
+  closedOpen=!closedOpen;
+  document.getElementById('closed-body').style.display=closedOpen?'block':'none';
+  document.getElementById('closed-toggle-btn').classList.toggle('open',closedOpen);
 });
  
  
