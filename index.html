@@ -316,8 +316,8 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>
       הוסף שורה חדשה
     </button>
-    <div id="archive-wrap" style="display: block;">
-      <button class="archive-toggle" id="archive-toggle-btn"><span class="arrow">▼</span><span>ארכיון טופל</span><span class="section-badge badge-gray" id="archive-count-badge" style="margin-right:auto">2</span></button>
+    <div id="archive-wrap" style="display:none;">
+      <button class="archive-toggle" id="archive-toggle-btn"><span class="arrow">▼</span><span>ארכיון טופל</span><span class="section-badge badge-gray" id="archive-count-badge" style="margin-right:auto">0</span></button>
       <div class="archive-section" id="archive-body" style="display:none">
         <div class="tbl-wrap">
           <table class="req-table">
@@ -478,7 +478,7 @@ function saveOrders(){
 }
  
 function saveReqs(){
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:reqs})})
+  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',sheet:'דרישות רכש',reqs:reqs})})
     .then(function(r){return r.json();}).catch(function(){});
 }
  
@@ -497,31 +497,43 @@ var DEFAULT_ORDERS = [
 ];
  
 function migrateOrder(r){
-  // המרה מפורמט ישן (boolean/0/1) לפורמט חדש (string)
   function toBool(v){return v==='1'||v===1||v==='true'||v===true;}
-  function toCurrency(v){if(v==='$'||v==='€'||v==='₪')return v;if(v&&v.indexOf('$')!==-1)return '$';if(v&&v.indexOf('€')!==-1)return '€';return '₪';}
-  function toTriState(v){
-    if(v==='כן'||v==='N/A')return v;
-    return toBool(v)?'כן':'';
+  function toTriState(v){if(v==='כן'||v==='N/A')return v;return toBool(v)?'כן':'';}
+  function splitAC(amt,cur){
+    var a=String(amt||''),c=String(cur||'');
+    if(a.indexOf('$')!==-1){c='$';a=a.replace(/[$]/g,'').trim();}
+    else if(a.indexOf('€')!==-1){c='€';a=a.replace(/[€]/g,'').trim();}
+    else if(a.indexOf('₪')!==-1){c='₪';a=a.replace(/[₪]/g,'').trim();}
+    if(c!=='$'&&c!=='€')c='₪';
+    return {a:a.trim(),c:c};
   }
+  // תמיכה בכותרות עבריות ואנגליות כאחד
+  function f(eng,heb){return r[eng]!==undefined&&r[eng]!==''&&r[eng]!==null?r[eng]:(r[heb]!==undefined?r[heb]:'');}
+  var ac=splitAC(f('amount','סכום'), f('currency','מטבע'));
+  var sc=splitAC(f('shipCost','עלות משלוח'), f('shipCurrency','מטבע משלוח'));
   return {
-    id:Number(r.id)||0,
-    po:r.po||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',
-    desc:r.desc||'',project:r.project||'',pm:r.pm||'',
-    amount:r.amount||'',currency:toCurrency(r.currency),
-    clientApproval:toTriState(r.clientApproval),
-    sentToVendor:toBool(r.sentToVendor),
-    deliveryDate:r.deliveryDate||'',
-    shipResp:r.shipResp||'',shipCost:r.shipCost||'',shipCurrency:toCurrency(r.shipCurrency),
-    shipClientApproval:toTriState(r.shipClientApproval),
-    tracking:r.tracking||'',
-    arrived:toBool(r.arrived),
-    qc:toTriState(r.qc),
-    notes:r.notes||'',
-    status:r.status||'פתוח',
-    paid:toBool(r.paid),
-    clientPaid:toBool(r.clientPaid),
-    billed:toTriState(r.billed),
+    id:Number(f('id','ID'))||0,
+    po:f('po','PO')||'',
+    vendor:f('vendor','ספק')||'',
+    quoteNum:f('quoteNum','מס הצעה')||'',
+    desc:f('desc','תיאור')||'',
+    project:f('project','פרויקט')||'',
+    pm:f('pm','מנהל פרויקט')||'',
+    amount:ac.a,currency:ac.c,
+    clientApproval:toTriState(f('clientApproval','אישור לקוח')),
+    sentToVendor:toBool(f('sentToVendor','שליחה לספק')),
+    deliveryDate:f('deliveryDate','תאריך אספקה')||'',
+    shipResp:f('shipResp','משלוח באחריות')||'',
+    shipCost:sc.a,shipCurrency:sc.c,
+    shipClientApproval:toTriState(f('shipClientApproval','אישור לקוח משלוח')),
+    tracking:f('tracking','מספר מעקב')||'',
+    arrived:toBool(f('arrived','קבלת סחורה')),
+    qc:toTriState(f('qc','QC')),
+    notes:f('notes','הערות')||'',
+    status:f('status','סטטוס')||'פתוח',
+    paid:toBool(f('paid','שולם לספק')),
+    clientPaid:toBool(f('clientPaid','לקוח שילם')),
+    billed:toTriState(f('billed','לקוח חוייב')),
   };
 }
  
@@ -549,12 +561,12 @@ function loadAll(silent){
       nid=33;
     })
     .finally(function(){
-      fetch(GS_URL+'?sheet=reqs')
+      fetch(GS_URL+'?sheet=דרישות רכש')
         .then(function(r){return r.json();})
         .then(function(d){
           if(Array.isArray(d)&&d.length){
             reqs=d.map(function(r){
-              return {id:Number(r.id)||0,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:r.amount||'',currency:toCurrency(r.currency),approved:r.approved==='true'||r.approved==='1',handled:r.handled==='true'||r.handled==='1'};
+              return {id:Number(r.id||r['ID'])||0,requester:r.requester||r['שם המבקש']||'',project:r.project||r['פרויקט']||'',desc:r.desc||r['תיאור כללי']||'',vendor:r.vendor||r['ספק']||'',quoteNum:r.quoteNum||r['מס\' הצ"מ']||'',amount:String(r.amount||r['סכום']||''),currency:toCurrency(r.currency||r['מטבע']),approved:r.approved==='true'||r.approved==='1'||r.approved===1||r.approved===true,handled:r.handled==='true'||r.handled==='1'||r.handled===1||r.handled===true};
             });
             var rids=reqs.map(function(r){return r.id||0;});
             rNid=rids.length?Math.max.apply(null,rids)+1:1;
