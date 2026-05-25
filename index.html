@@ -80,11 +80,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tbl-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
  
-thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
-thead tr:first-child th.group-process{color:var(--accent);background:rgba(59,110,245,0.05);}
-thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
-thead tr:first-child th.group-status{color:var(--warn);background:rgba(232,150,10,0.05);}
-thead tr:last-child th{background:var(--surface2);text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
+.orders-tbl thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
+.orders-tbl thead tr:first-child th.group-process{color:var(--accent);background:rgba(59,110,245,0.05);}
+.orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
+.orders-tbl thead tr:first-child th.group-status{color:var(--warn);background:rgba(232,150,10,0.05);}
+.orders-tbl thead tr:last-child th{background:var(--surface2);text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
  
 /* אין הקפאת עמודות */
  
@@ -483,6 +483,47 @@ function saveReqs(){
 }
  
 // ── LOAD ──
+var DEFAULT_ORDERS = [
+  {id:17,po:'PO26000059',vendor:'נורטק',desc:'עריכה Vensica Product label',project:'Vensica',pm:'',amount:'1,420',currency:'$',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:22,po:'PO26000064',vendor:'איים סולדר ישראל בע"מ',desc:'חומרי הלחמה',project:'Sonolumi',pm:'',amount:'353',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:25,po:'PO26000066',vendor:'ריאון בע"מ',desc:'תוספת תשלום בגין setup להזרקות',project:'RBY',pm:'',amount:'1,400',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:26,po:'PO26000067',vendor:'נורטק',desc:'שירות טכנאי באתר הלקוח',project:'Vensica',pm:'',amount:'525',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:27,po:'PO26000068',vendor:'גיילופ בע"מ',desc:'דבק',project:'Vensica',pm:'',amount:'560',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:28,po:'PO26000068',vendor:'גיילופ בע"מ',desc:'דבק',project:'RBY',pm:'',amount:'250',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:29,po:'PO26000069',vendor:'Fort Wayne Metals',desc:'NiTi #1 ELI-DFT®-30%Pt 0.038 mm',project:'CERENEX',pm:'',amount:'21,885.25',currency:'$',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:30,po:'PO26000070',vendor:'Microgroup Inc',desc:'304H22X / Tubing; Hypodermic',project:'RBY',pm:'',amount:'400',currency:'$',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:31,po:'PO26000071',vendor:'הירש',desc:'חלקים למתקן זרימה',project:'PARAVESCULAR',pm:'',amount:'2200',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+  {id:32,po:'PO26000072',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית',desc:'חלקים מזכוכית למתקן זרימה',project:'PARAVESCULAR',pm:'',amount:'1800',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
+];
+ 
+function migrateOrder(r){
+  // המרה מפורמט ישן (boolean/0/1) לפורמט חדש (string)
+  function toBool(v){return v==='1'||v===1||v==='true'||v===true;}
+  function toTriState(v){
+    if(v==='כן'||v==='N/A')return v;
+    return toBool(v)?'כן':'';
+  }
+  return {
+    id:Number(r.id)||0,
+    po:r.po||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',
+    desc:r.desc||'',project:r.project||'',pm:r.pm||'',
+    amount:r.amount||'',currency:r.currency||'₪',
+    clientApproval:toTriState(r.clientApproval),
+    sentToVendor:toBool(r.sentToVendor),
+    deliveryDate:r.deliveryDate||'',
+    shipResp:r.shipResp||'',shipCost:r.shipCost||'',shipCurrency:r.shipCurrency||'₪',
+    shipClientApproval:toTriState(r.shipClientApproval),
+    tracking:r.tracking||'',
+    arrived:toBool(r.arrived),
+    qc:toTriState(r.qc),
+    notes:r.notes||'',
+    status:r.status||'פתוח',
+    paid:toBool(r.paid),
+    clientPaid:toBool(r.clientPaid),
+    billed:toTriState(r.billed),
+  };
+}
+ 
 function loadAll(silent){
   if(!silent){document.getElementById('loading-overlay').classList.remove('hidden');}
   setSyncStatus('syncing',silent?'מרענן...':'טוען...');
@@ -491,16 +532,21 @@ function loadAll(silent){
     .then(function(r){return r.json();})
     .then(function(d){
       if(Array.isArray(d)&&d.length){
-        orders=d.map(function(r){
-          return {id:Number(r.id)||0,po:r.po||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',desc:r.desc||'',project:r.project||'',pm:r.pm||'',amount:r.amount||'',currency:r.currency||'₪',clientApproval:r.clientApproval==='1',sentToVendor:r.sentToVendor==='1',deliveryDate:r.deliveryDate||'',shipResp:r.shipResp||'',shipCost:r.shipCost||'',shipCurrency:r.shipCurrency||'₪',shipClientApproval:r.shipClientApproval==='1',tracking:r.tracking||'',arrived:r.arrived==='1',qc:r.qc==='1',notes:r.notes||'',status:r.status||'פתוח',paid:r.paid==='1',clientPaid:r.clientPaid==='1',billed:r.billed||'',qc:r.qc||'',clientApproval:r.clientApproval||'',shipClientApproval:r.shipClientApproval||''};
-        });
+        orders=d.map(migrateOrder);
         var ids=orders.map(function(o){return o.id||0;});
         nid=ids.length?Math.max.apply(null,ids)+1:1;
+      } else {
+        // Sheets ריק — טען את הנתונים השמורים
+        orders=DEFAULT_ORDERS.map(migrateOrder);
+        nid=33;
+        saveOrders();
       }
-      // אם Sheets ריק — שמור את ברירת המחדל ל-Sheets
-      if(!Array.isArray(d)||!d.length){saveOrders();}
     })
-    .catch(function(){})
+    .catch(function(){
+      // אין חיבור — הצג נתוני ברירת מחדל
+      orders=DEFAULT_ORDERS.map(migrateOrder);
+      nid=33;
+    })
     .finally(function(){
       fetch(GS_URL+'?sheet=reqs')
         .then(function(r){return r.json();})
