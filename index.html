@@ -317,8 +317,8 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
       הוסף שורה חדשה
     </button>
     <div id="archive-wrap" style="display:none;">
-      <button class="archive-toggle" id="archive-toggle-btn"><span class="arrow">▼</span><span>ארכיון טופל</span><span class="section-badge badge-gray" id="archive-count-badge" style="margin-right:auto">0</span></button>
-      <div class="archive-section" id="archive-body" style="display:none">
+      <button class="archive-toggle open" id="archive-toggle-btn"><span class="arrow">▼</span><span>ארכיון טופל</span><span class="section-badge badge-gray" id="archive-count-badge" style="margin-right:auto">0</span></button>
+      <div class="archive-section" id="archive-body" style="display:block">
         <div class="tbl-wrap">
           <table class="req-table">
             <thead><tr><th style="width:140px">שם המבקש</th><th style="width:110px">פרויקט</th><th>תיאור כללי</th><th style="width:130px">ספק</th><th style="width:120px">מס' הצ"מ</th><th style="width:90px">סכום</th><th style="width:70px;text-align:center">מטבע</th><th style="width:80px;text-align:center">אישור לקוח</th><th style="width:70px;text-align:center">טופל</th><th style="width:50px"></th></tr></thead>
@@ -454,7 +454,12 @@ var GS_URL = 'https://script.google.com/macros/s/AKfycbzRAuF--VGlgVX_r62YlgAVqop
  
  
  
-var reqs=[],activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=false,closedOpen=true;
+var DEFAULT_REQS = [
+  {id:2,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'הירש',quoteNum:'',amount:'2200',currency:'₪',approved:true,handled:false},
+  {id:4,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית מקצועי',quoteNum:'',amount:'1800',currency:'₪',approved:true,handled:true},
+  {id:5,requester:'מיכל',project:'וונסיקה',desc:'טכנאי מדפסת',vendor:'נורטק',quoteNum:'',amount:'525',currency:'₪',approved:true,handled:true},
+];
+var reqs=[],activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
 var orders=[];
 var rNid=1,nid=1;
  
@@ -478,7 +483,10 @@ function saveOrders(){
 }
  
 function saveReqs(){
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:reqs})})
+  var flat=reqs.map(function(r){
+    return {id:r.id,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:r.amount||'',currency:r.currency||'₪',approved:r.approved?'1':'0',handled:r.handled?'1':'0'};
+  });
+  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:flat})})
     .then(function(r){return r.json();}).catch(function(){});
 }
  
@@ -566,10 +574,15 @@ function loadAll(silent){
         .then(function(d){
           if(Array.isArray(d)&&d.length){
             reqs=d.map(function(r){
-              return {id:Number(r.id||r['ID'])||0,requester:r.requester||r['שם המבקש']||'',project:r.project||r['פרויקט']||'',desc:r.desc||r['תיאור כללי']||'',vendor:r.vendor||r['ספק']||'',quoteNum:r.quoteNum||r['מס\' הצ"מ']||'',amount:String(r.amount||r['סכום']||''),currency:toCurrency(r.currency||r['מטבע']),approved:r.approved==='true'||r.approved==='1'||r.approved===1||r.approved===true,handled:r.handled==='true'||r.handled==='1'||r.handled===1||r.handled===true};
+              var handled=['true','1','TRUE'].indexOf(String(r.handled))!==-1;
+              var approved=['true','1','TRUE'].indexOf(String(r.approved))!==-1;
+              return {id:Number(r.id||r['ID'])||0,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:String(r.amount||''),currency:r.currency||'₪',approved:approved,handled:handled};
             });
             var rids=reqs.map(function(r){return r.id||0;});
             rNid=rids.length?Math.max.apply(null,rids)+1:1;
+          } else {
+            reqs=DEFAULT_REQS.slice();
+            rNid=6;
           }
         })
         .catch(function(){})
@@ -685,7 +698,7 @@ function applyReqSort(list){
 function renderReqs(){
   var q=(document.getElementById('req-search')||{value:''}).value.toLowerCase();
   var active=reqs.filter(function(r){return !r.handled;});
-  var archived=reqs.filter(function(r){return r.handled;});
+  var archived=reqs.filter(function(r){return r.handled===true;});
  
   // filter
   if(reqFilter==='approved') active=active.filter(function(r){return r.approved;});
@@ -704,7 +717,13 @@ function renderReqs(){
   if(!active.length){em.style.display='block';}else{em.style.display='none';active.forEach(function(r){tbody.appendChild(buildReqRow(r));});}
   var archiveWrap=document.getElementById('archive-wrap'),archiveTbody=document.getElementById('archive-tbody');
   archiveTbody.innerHTML='';
-  if(archived.length){archiveWrap.style.display='block';archived.forEach(function(r){archiveTbody.appendChild(buildReqRow(r));});}else{archiveWrap.style.display='none';}
+  console.log('archived count:',archived.length, archived);
+  if(archived.length){
+    archiveWrap.style.display='block';
+    archived.forEach(function(r){archiveTbody.appendChild(buildReqRow(r));});
+  }else{
+    archiveWrap.style.display='none';
+  }
 }
  
 function addReqRow(){
@@ -1027,3 +1046,8 @@ document.getElementById('btn-download-src').addEventListener('click', function()
  
  
 </body></html>
+
+
+
+
+
