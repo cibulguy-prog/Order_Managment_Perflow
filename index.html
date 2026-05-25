@@ -459,7 +459,7 @@ var DEFAULT_REQS = [
   {id:4,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית מקצועי',quoteNum:'',amount:'1800',currency:'₪',approved:true,handled:true},
   {id:5,requester:'מיכל',project:'וונסיקה',desc:'טכנאי מדפסת',vendor:'נורטק',quoteNum:'',amount:'525',currency:'₪',approved:true,handled:true},
 ];
-var reqs=[],activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
+var reqs=DEFAULT_REQS.slice(),activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
 var orders=[];
 var rNid=1,nid=1;
  
@@ -1046,8 +1046,3 @@ document.getElementById('btn-download-src').addEventListener('click', function()
  
  
 </body></html>
-
-
-
-
-
