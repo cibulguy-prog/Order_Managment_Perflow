@@ -1,32 +1,21 @@
+<!DOCTYPE html>
 <html lang="he" dir="rtl"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מעקב הזמנות לקוחות</title>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --bg:#f0f4f8; --surface:#fff; --surface2:#f4f6fa; --surface3:#e8ecf2;
-  --border:rgba(0,0,0,0.08); --border2:rgba(0,0,0,0.13);
-  --text:#1a1f36; --text2:#4a5278; --text3:#8b92b0;
-  --accent:#3b6ef5; --accent-glow:rgba(59,110,245,0.1);
-  --accent2:#00b896; --accent2-glow:rgba(0,184,150,0.1);
-  --warn:#e8960a; --warn-glow:rgba(232,150,10,0.1);
-  --danger:#e8324f; --danger-glow:rgba(232,50,79,0.1);
-  --r:10px; --r-lg:16px;
-}
+:root{--bg:#f0f4f8;--surface:#fff;--surface2:#f4f6fa;--surface3:#e8ecf2;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.13);--text:#1a1f36;--text2:#4a5278;--text3:#8b92b0;--accent:#3b6ef5;--accent-glow:rgba(59,110,245,0.1);--accent2:#00b896;--accent2-glow:rgba(0,184,150,0.1);--warn:#e8960a;--warn-glow:rgba(232,150,10,0.1);--danger:#e8324f;--danger-glow:rgba(232,50,79,0.1);--r:10px;--r-lg:16px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(59,110,245,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,110,245,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
- 
-.header{position:sticky;top:0;z-index:20;background:rgba(240,244,248,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.header{position:sticky;top:0;z-index:100;background:rgba(240,244,248,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;}
 .brand{display:flex;align-items:center;gap:12px;}
 .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#7c4dff);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
 .brand-name{font-size:15px;font-weight:600;}
 .brand-sub{font-size:11px;color:var(--text3);margin-top:1px;}
 .header-right{display:flex;align-items:center;gap:10px;}
- 
-/* סטטוס סנכרון */
 .sync-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);transition:all 0.3s;}
 .sync-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background 0.3s;}
 .sync-pill.syncing .dot{background:var(--warn);animation:pulse 1s infinite;}
@@ -36,9 +25,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sync-pill.ok{border-color:rgba(0,184,150,0.3);color:var(--accent2);}
 .sync-pill.err{border-color:rgba(232,50,79,0.3);color:var(--danger);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
- 
- 
- 
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);font-size:13px;font-family:'Heebo',sans-serif;color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .btn:hover{background:var(--surface3);color:var(--text);}
 .btn-accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500;}
@@ -50,7 +36,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .btn-danger:hover{background:var(--danger-glow);}
 .btn-add-row{width:100%;padding:10px;border-radius:0 0 var(--r-lg) var(--r-lg);border:none;border-top:1px dashed var(--border2);background:var(--surface2);font-family:'Heebo',sans-serif;font-size:13px;color:var(--text3);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .btn-add-row:hover{background:var(--surface3);color:var(--accent);}
- 
 .main{position:relative;z-index:1;padding:1.5rem 2rem;max-width:1700px;margin:0 auto;}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
 .section-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;}
@@ -58,13 +43,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .badge-purple{background:rgba(124,77,255,0.1);color:#7c4dff;}
 .badge-blue{background:var(--accent-glow);color:var(--accent);}
 .badge-gray{background:var(--surface3);color:var(--text3);}
- 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;}
 .stat-label{font-size:11px;color:var(--text3);margin-bottom:6px;}
 .stat-value{font-size:26px;font-weight:600;}
 .stat-value.accent{color:var(--accent);}.stat-value.success{color:var(--accent2);}.stat-value.warn{color:var(--warn);}.stat-value.danger{color:var(--danger);}
- 
 .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:12px;flex-wrap:wrap;}
 .filters{display:flex;gap:6px;flex-wrap:wrap;}
 .pill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;font-family:'Heebo',sans-serif;cursor:pointer;background:transparent;color:var(--text3);transition:all 0.15s;}
@@ -75,33 +58,33 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .search-box svg{width:14px;height:14px;opacity:0.35;flex-shrink:0;}
 .search-box input{background:none;border:none;outline:none;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text);width:220px;padding:8px 0;}
 .search-box input::placeholder{color:var(--text3);}
- 
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem;}
 .tbl-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
  
+/* ── STICKY HEADERS ── */
+.orders-tbl thead{position:sticky;top:64px;z-index:10;}
 .orders-tbl thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
 .orders-tbl thead tr:first-child th.group-process{color:var(--accent);background:rgba(59,110,245,0.05);}
 .orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
 .orders-tbl thead tr:first-child th.group-status{color:var(--warn);background:rgba(232,150,10,0.05);}
 .orders-tbl thead tr:last-child th{background:var(--surface2);text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
  
-/* אין הקפאת עמודות */
+/* ── STICKY FIRST 2 COLUMNS ── */
+.orders-tbl th:nth-child(1),.orders-tbl td:nth-child(1){position:sticky;right:0;z-index:5;background:var(--surface);box-shadow:-2px 0 4px rgba(0,0,0,0.06);}
+.orders-tbl th:nth-child(2),.orders-tbl td:nth-child(2){position:sticky;right:130px;z-index:5;background:var(--surface);}
+.orders-tbl thead th:nth-child(1),.orders-tbl thead th:nth-child(2){z-index:11;background:var(--surface2);}
+tbody tr.row-סגור td:nth-child(1),tbody tr.row-סגור td:nth-child(2){background:rgba(0,184,150,0.06)!important;}
+tbody tr.row-בוטל td:nth-child(1),tbody tr.row-בוטל td:nth-child(2){background:rgba(232,50,79,0.05)!important;}
  
 td{padding:0;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;text-align:right;height:44px;border-left:1px solid var(--border);}
 td:last-child{border-left:none;}
 tr:last-child td{border-bottom:none;}
 tbody tr{transition:background 0.1s;}
- 
-/* צבעי שורה לפי סטטוס */
-tbody tr.row-התקבל td{background:rgba(0,184,150,0.04);}
-tbody tr.row-התקבל:hover td{background:rgba(0,184,150,0.08);}
-tbody tr.row-עיכוב td{background:rgba(232,50,79,0.05);}
-tbody tr.row-עיכוב:hover td{background:rgba(232,50,79,0.09);}
-tbody tr.row-בדרך td{background:rgba(232,150,10,0.04);}
-tbody tr.row-בדרך:hover td{background:rgba(232,150,10,0.08);}
-tbody tr.row-חלקי td{background:rgba(124,77,255,0.04);}
-tbody tr.row-חלקי:hover td{background:rgba(124,77,255,0.08);}
+tbody tr.row-סגור td{background:rgba(0,184,150,0.06);}
+tbody tr.row-סגור:hover td{background:rgba(0,184,150,0.11);}
+tbody tr.row-בוטל td{background:rgba(232,50,79,0.05);}
+tbody tr.row-בוטל:hover td{background:rgba(232,50,79,0.09);}
 tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
 tbody tr.row-done td{background:rgba(0,0,0,0.015);}
 tbody tr.row-done .cell-text{color:var(--text3);text-decoration:line-through;}
@@ -114,37 +97,25 @@ td.editing .cell-input{display:block;}
 .cell-select-wrap{display:block;width:100%;min-height:44px;padding:0 6px;line-height:44px;}
 .cell-select{width:100%;border:none;background:transparent;font-family:'Heebo',sans-serif;font-size:12px;color:var(--text2);cursor:pointer;outline:none;padding:2px 0;}
 .cell-select:focus{color:var(--accent);}
- 
 .step-cell{text-align:center;padding:0 4px;border-left:1px solid var(--border);}
 .step-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .step-btn:hover{border-color:var(--accent);background:var(--accent-glow);}
 .step-btn.done{background:var(--accent2-glow);border-color:rgba(0,184,150,0.4);color:var(--accent2);}
 .step-btn.paid-style{background:rgba(59,110,245,0.12)!important;border-color:rgba(59,110,245,0.4)!important;color:var(--accent)!important;}
-.step-btn.billed-style{background:rgba(124,77,255,0.12)!important;border-color:rgba(124,77,255,0.4)!important;color:#7c4dff!important;}
 .step-btn.client-paid-style{background:rgba(0,184,150,0.12)!important;border-color:rgba(0,184,150,0.4)!important;color:var(--accent2)!important;}
 .step-btn.done::after{content:'✓';font-size:13px;font-weight:700;}
 .step-btn:not(.done)::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--border2);}
- 
 .cur-select{border:1px solid var(--border2);border-radius:6px;background:var(--surface2);font-family:'Heebo',sans-serif;font-size:12px;color:var(--text2);padding:4px 6px;cursor:pointer;outline:none;}
-.cur-select:focus{border-color:var(--accent);}
- 
-/* מספר מעקב + העתק */
 .tracking-wrap{display:flex;align-items:center;gap:4px;padding:0 8px;min-width:120px;}
 .tracking-val{font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;cursor:text;min-height:44px;line-height:44px;}
 .tracking-val.ph{color:var(--text3);}
-.tracking-inp{display:none;flex:1;height:44px;padding:0 4px;border:none;outline:none;font-size:11px;font-family:'Heebo',sans-serif;background:rgba(59,110,245,0.05);outline:2px solid var(--accent);outline-offset:-2px;}
+.tracking-inp{display:none;flex:1;height:44px;padding:0 4px;border:none;outline:2px solid var(--accent);outline-offset:-2px;font-size:11px;font-family:'Heebo',sans-serif;background:rgba(59,110,245,0.05);}
 .copy-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);flex-shrink:0;transition:all 0.15s;}
 .copy-btn:hover{background:var(--accent-glow);border-color:rgba(59,110,245,0.4);color:var(--accent);}
- 
-.progress-wrap{width:80px;padding:0 8px;}
-.progress-bar{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-bottom:3px;}
-.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s;}
-.progress-label{font-size:10px;color:var(--text3);text-align:center;}
-.po-cell{font-weight:600;font-size:12px;font-family:'Courier New',monospace;color:var(--accent);}
 .row-actions{display:flex;gap:4px;justify-content:flex-end;padding:0 6px;}
- 
 .req-table{min-width:1050px;table-layout:fixed;width:100%;}
 .req-table td{overflow:hidden;}
+.req-table thead{position:sticky;top:64px;z-index:10;}
 .req-table thead tr th{background:rgba(124,77,255,0.06);font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#7c4dff;padding:10px;border-bottom:1px solid var(--border);text-align:right;border-left:1px solid var(--border);}
 .req-table thead tr th:last-child{border-left:none;}
 .archive-toggle{width:100%;padding:10px 16px;border:none;background:var(--surface2);font-family:'Heebo',sans-serif;font-size:13px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background 0.15s;}
@@ -153,14 +124,11 @@ td.editing .cell-input{display:block;}
 .archive-toggle.open .arrow{transform:rotate(180deg);}
 .archive-section{border-top:2px dashed var(--border2);background:rgba(0,0,0,0.01);}
 .archive-section table{opacity:0.7;}
- 
-/* Loading */
 .loading-overlay{position:fixed;inset:0;background:rgba(240,244,248,0.85);backdrop-filter:blur(6px);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s;}
 .loading-overlay.hidden{opacity:0;pointer-events:none;}
 .spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:14px;color:var(--text2);}
- 
 .empty{text-align:center;padding:3rem 2rem;color:var(--text3);}
 .empty-icon{font-size:40px;margin-bottom:10px;opacity:0.35;}
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;}
@@ -173,27 +141,16 @@ td.editing .cell-input{display:block;}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:var(--r);font-size:13px;z-index:300;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
 .toast.show{transform:translateX(-50%) translateY(0);}
 ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
- 
-/* ── LOGIN ── */
 .login-overlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;}
 .login-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);padding:2.5rem;width:min(90vw,340px);text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.1);}
 .login-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--accent),#7c4dff);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 1.25rem;}
 .login-title{font-size:17px;font-weight:600;margin-bottom:6px;}
 .login-sub{font-size:12px;color:var(--text3);margin-bottom:1.5rem;}
 .login-input{width:100%;padding:10px 14px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface2);font-family:'Heebo',sans-serif;font-size:14px;color:var(--text);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px;}
-.login-input:focus{border-color:rgba(59,110,245,0.5);background:var(--surface3);}
-.login-btn{width:100%;padding:10px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+.login-input:focus{border-color:rgba(59,110,245,0.5);}
+.login-btn{width:100%;padding:10px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
 .login-btn:hover{background:#2a5ce0;}
 .login-err{font-size:12px;color:var(--danger);margin-top:8px;min-height:16px;}
- 
-/* סטטוס שורה */
-tbody tr.row-סגור td{background:rgba(0,184,150,0.06);}
-tbody tr.row-סגור:hover td{background:rgba(0,184,150,0.11);}
-tbody tr.row-בוטל td{background:rgba(232,50,79,0.05);}
-tbody tr.row-בוטל:hover td{background:rgba(232,50,79,0.09);}
-tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
- 
-/* דשבורד */
 .dashboard{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem;}
 .dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;min-width:180px;}
 .dash-donut{position:relative;width:48px;height:48px;flex-shrink:0;}
@@ -204,25 +161,19 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
 .dash-legend{display:flex;flex-direction:column;gap:2px;}
 .dash-legend-item{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px;}
 .dash-legend-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
- 
-/* sort */
 .col-sort,.req-sort{cursor:pointer;user-select:none;}
 .col-sort:hover,.req-sort:hover{background:var(--surface3)!important;}
 .sort-arrow{font-size:9px;color:var(--text3);margin-right:2px;}
 .sort-arrow.asc::after{content:'↑';}
 .sort-arrow.desc::after{content:'↓';}
- 
-/* scrollbar עבה */
 .tbl-wrap::-webkit-scrollbar{height:10px;}
 .tbl-wrap::-webkit-scrollbar-track{background:var(--surface3);border-radius:5px;}
 .tbl-wrap::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.3);border-radius:5px;}
 .tbl-wrap::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.5);}
- 
 #closed-wrap{margin-bottom:1.5rem;}
 </style>
 </head>
 <body>
- 
  
 <div class="login-overlay" id="login-overlay" style="display:flex;">
   <div class="login-box">
@@ -249,37 +200,17 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
     </div>
   </div>
   <div class="header-right">
- 
-    <div class="sync-pill ok" id="sync-pill">
-      <span class="dot"></span>
-      <span id="sync-text">מסונכרן ✓</span>
-    </div>
-    <button class="btn" id="btn-refresh">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M14 8A6 6 0 1 1 8 2"></path><path d="M14 2v4h-4"></path></svg>
-      רענן
-    </button>
-    <button class="btn btn-success" id="btn-export">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M8 10V2M8 10l-3-3M8 10l3-3M2 13h12"></path></svg>
-      ייצוא Excel
-    </button>
-    <button class="btn" id="btn-download-src" title="הורד קוד מקור">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M8 10V2M8 10l-3-3M8 10l3-3M2 14h12"></path></svg>
-      קוד מקור
-    </button>
-    <button class="btn btn-accent" id="btn-new-order">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>
-      הזמנה חדשה
-    </button>
+    <div class="sync-pill ok" id="sync-pill"><span class="dot"></span><span id="sync-text">מסונכרן ✓</span></div>
+    <button class="btn" id="btn-refresh"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M14 8A6 6 0 1 1 8 2"></path><path d="M14 2v4h-4"></path></svg>רענן</button>
+    <button class="btn btn-success" id="btn-export"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M8 10V2M8 10l-3-3M8 10l3-3M2 13h12"></path></svg>ייצוא Excel</button>
+    <button class="btn" id="btn-download-src"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M8 10V2M8 10l-3-3M8 10l3-3M2 14h12"></path></svg>קוד מקור</button>
+    <button class="btn btn-accent" id="btn-new-order"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>הזמנה חדשה</button>
   </div>
 </header>
  
 <main class="main">
- 
   <div class="section-header">
-    <div class="section-title">
-      <span>📋</span> דרישות רכש
-      <span class="section-badge badge-purple" id="req-count-badge">0</span>
-    </div>
+    <div class="section-title"><span>📋</span> דרישות רכש<span class="section-badge badge-purple" id="req-count-badge">0</span></div>
   </div>
   <div class="toolbar" style="margin-bottom:0.75rem;">
     <div class="filters" id="req-filters">
@@ -305,23 +236,21 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
             <th class="req-sort" data-col="amount" style="width:90px">סכום <span class="sort-arrow"></span></th>
             <th style="width:80px;text-align:center">מטבע</th>
             <th style="width:90px;text-align:center">אישור לקוח</th>
-            <th style="width:80px;text-align:center">טופל</th><th style="width:60px"></th>
+            <th style="width:80px;text-align:center">טופל</th>
+            <th style="width:60px"></th>
           </tr>
         </thead>
         <tbody id="req-tbody"></tbody>
       </table>
     </div>
     <div id="req-empty" class="empty" style="display:none"><div class="empty-icon">📋</div><div style="font-size:14px;color:var(--text2)">אין דרישות רכש פעילות</div></div>
-    <button class="btn-add-row" id="btn-add-req">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>
-      הוסף שורה חדשה
-    </button>
+    <button class="btn-add-row" id="btn-add-req"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>הוסף שורה חדשה</button>
     <div id="archive-wrap" style="display:none;">
       <button class="archive-toggle open" id="archive-toggle-btn"><span class="arrow">▼</span><span>ארכיון טופל</span><span class="section-badge badge-gray" id="archive-count-badge" style="margin-right:auto">0</span></button>
       <div class="archive-section" id="archive-body" style="display:block">
         <div class="tbl-wrap">
           <table class="req-table">
-            <thead><tr><th style="width:140px">שם המבקש</th><th style="width:110px">פרויקט</th><th>תיאור כללי</th><th style="width:130px">ספק</th><th style="width:120px">מס' הצ"מ</th><th style="width:90px">סכום</th><th style="width:70px;text-align:center">מטבע</th><th style="width:80px;text-align:center">אישור לקוח</th><th style="width:70px;text-align:center">טופל</th><th style="width:50px"></th></tr></thead>
+            <thead><tr><th style="width:140px">שם המבקש</th><th style="width:110px">פרויקט</th><th>תיאור כללי</th><th style="width:130px">ספק</th><th style="width:120px">מס' הצ"מ</th><th style="width:90px">סכום</th><th style="width:80px;text-align:center">מטבע</th><th style="width:90px;text-align:center">אישור לקוח</th><th style="width:80px;text-align:center">טופל</th><th style="width:60px"></th></tr></thead>
             <tbody id="archive-tbody"></tbody>
           </table>
         </div>
@@ -329,14 +258,11 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
     </div>
   </div>
  
-  <!-- דשבורד פרויקטים -->
   <div class="section-header">
     <div class="section-title"><span>📦</span> הזמנות<span class="section-badge badge-blue" id="orders-count-badge">0</span></div>
   </div>
   <div id="dashboard" class="dashboard"></div>
   <div class="stats" id="stats" style="margin-bottom:1rem;"></div>
- 
-  <!-- כלים -->
   <div class="toolbar">
     <div class="filters" id="filters">
       <button class="pill active" data-filter="all">הכל</button>
@@ -349,8 +275,6 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
       <input type="text" id="search" placeholder="חיפוש לפי PO, ספק, פרויקט, תיאור...">
     </div>
   </div>
- 
-  <!-- טבלת הזמנות פעילות -->
   <div class="table-card">
     <div class="tbl-wrap">
       <table id="orders-table" class="orders-tbl" style="min-width:1800px">
@@ -380,7 +304,7 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
             <th style="min-width:90px;text-align:center">אישור לקוח</th>
             <th style="min-width:130px;border-right:1px solid rgba(232,150,10,0.15)">מספר מעקב</th>
             <th style="min-width:90px;text-align:center">קבלת סחורה</th>
-            <th style="min-width:70px;text-align:center">QC</th>
+            <th style="min-width:90px;text-align:center">QC</th>
             <th style="min-width:90px;text-align:center">לקוח חוייב</th>
             <th style="min-width:80px;text-align:center">שולם לספק</th>
             <th style="min-width:80px;text-align:center">לקוח שילם</th>
@@ -393,13 +317,9 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
       </table>
     </div>
     <div id="empty-msg" class="empty" style="display:none"><div class="empty-icon">📦</div><div style="font-size:15px;color:var(--text2)">אין הזמנות</div></div>
-    <button class="btn-add-row" id="btn-add-order">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>
-      הוסף הזמנה חדשה
-    </button>
+    <button class="btn-add-row" id="btn-add-order"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>הוסף הזמנה חדשה</button>
   </div>
  
-  <!-- הזמנות סגורות -->
   <div id="closed-wrap">
     <button class="archive-toggle open" id="closed-toggle-btn">
       <span class="arrow">▼</span><span>הזמנות סגורות / בוטלו</span>
@@ -411,25 +331,26 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
           <thead>
             <tr>
               <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
-              <th colspan="2" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
+              <th colspan="3" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
               <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
-              <th colspan="6" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
+              <th colspan="7" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
               <th style="background:var(--surface2)"></th>
             </tr>
             <tr>
               <th style="min-width:130px">PO</th><th style="min-width:110px">ספק</th><th style="min-width:110px">מס הצעה</th>
               <th style="min-width:140px">תיאור</th><th style="min-width:100px">פרויקט</th><th style="min-width:110px">מנהל פרויקט</th>
               <th style="min-width:90px">סכום</th><th style="min-width:70px;text-align:center">מטבע</th>
-              <th style="min-width:80px;text-align:center;border-right:1px solid rgba(59,110,245,0.15)">אישור לקוח</th>
+              <th style="min-width:90px;text-align:center">אישור לקוח</th>
               <th style="min-width:80px;text-align:center">שליחה לספק</th>
-              <th style="min-width:110px;text-align:center;border-right:1px solid rgba(0,184,150,0.15)">תאריך אספקה</th>
+              <th style="min-width:110px;text-align:center">תאריך אספקה</th>
               <th style="min-width:110px;text-align:center">משלוח באחריות</th>
               <th style="min-width:90px">עלות משלוח</th><th style="min-width:70px;text-align:center">מטבע</th>
-              <th style="min-width:80px;text-align:center">אישור לקוח</th>
-              <th style="min-width:130px;border-right:1px solid rgba(232,150,10,0.15)">מספר מעקב</th>
-              <th style="min-width:80px;text-align:center">התקבל</th><th style="min-width:60px;text-align:center">QC</th>
-              <th style="min-width:80px;text-align:center">שולם</th>
-            <th style="min-width:90px;text-align:center">לקוח חוייב</th>
+              <th style="min-width:90px;text-align:center">אישור לקוח</th>
+              <th style="min-width:130px">מספר מעקב</th>
+              <th style="min-width:90px;text-align:center">קבלת סחורה</th><th style="min-width:90px;text-align:center">QC</th>
+              <th style="min-width:90px;text-align:center">לקוח חוייב</th>
+              <th style="min-width:80px;text-align:center">שולם לספק</th>
+              <th style="min-width:80px;text-align:center">לקוח שילם</th>
               <th style="min-width:140px">הערות</th>
               <th style="min-width:90px;text-align:center">סטטוס</th><th style="min-width:50px"></th>
             </tr>
@@ -450,48 +371,16 @@ tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
 <div class="toast" id="toast"></div>
  
 <script>
-var GS_URL = 'https://script.google.com/macros/s/AKfycbzRAuF--VGlgVX_r62YlgAVqopxxZMoFrp6X9xlrHm2OjUI71CFuOXt_SISUgldxO-H6A/exec';
+var GS_URL='https://script.google.com/macros/s/AKfycbzRAuF--VGlgVX_r62YlgAVqopxxZMoFrp6X9xlrHm2OjUI71CFuOXt_SISUgldxO-H6A/exec';
+var PASSWORD='PFTM7942';
  
- 
- 
-var DEFAULT_REQS = [
+var DEFAULT_REQS=[
   {id:2,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'הירש',quoteNum:'',amount:'2200',currency:'₪',approved:true,handled:false},
   {id:4,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית מקצועי',quoteNum:'',amount:'1800',currency:'₪',approved:true,handled:true},
   {id:5,requester:'מיכל',project:'וונסיקה',desc:'טכנאי מדפסת',vendor:'נורטק',quoteNum:'',amount:'525',currency:'₪',approved:true,handled:true},
 ];
-var reqs=DEFAULT_REQS.slice(),activeFilter='all',syncing=false,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
-var orders=[];
-var rNid=1,nid=1;
  
- 
-// ── SYNC STATUS ──
-function setSyncStatus(state,msg){
-  var pill=document.getElementById('sync-pill'),text=document.getElementById('sync-text');
-  pill.className='sync-pill '+state; text.textContent=msg;
-}
- 
-// ── SAVE ──
-function saveOrders(){
-  setSyncStatus('syncing','שומר...');
-  var flat=orders.map(function(o){
-    return {id:o.id,po:o.po,vendor:o.vendor,quoteNum:o.quoteNum||'',desc:o.desc,project:o.project,pm:o.pm||'',amount:o.amount,currency:o.currency||'₪',clientApproval:o.clientApproval?'1':'0',sentToVendor:o.sentToVendor?'1':'0',deliveryDate:o.deliveryDate||'',shipResp:o.shipResp||'',shipCost:o.shipCost||'',shipCurrency:o.shipCurrency||'₪',shipClientApproval:o.shipClientApproval?'1':'0',tracking:o.tracking||'',arrived:o.arrived?'1':'0',qc:o.qc?'1':'0',notes:o.notes||'',status:o.status||'פתוח',paid:o.paid?'1':'0',clientPaid:o.clientPaid?'1':'0',billed:o.billed||'',qc:o.qc||'',clientApproval:o.clientApproval||'',shipClientApproval:o.shipClientApproval||''};
-  });
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_all',orders:flat})})
-    .then(function(r){return r.json();})
-    .then(function(d){setSyncStatus(d.ok?'ok':'err',d.ok?'נשמר ✓':'שגיאה');})
-    .catch(function(){setSyncStatus('err','אין חיבור');});
-}
- 
-function saveReqs(){
-  var flat=reqs.map(function(r){
-    return {id:r.id,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:r.amount||'',currency:r.currency||'₪',approved:r.approved?'1':'0',handled:r.handled?'1':'0'};
-  });
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:flat})})
-    .then(function(r){return r.json();}).catch(function(){});
-}
- 
-// ── LOAD ──
-var DEFAULT_ORDERS = [
+var DEFAULT_ORDERS=[
   {id:17,po:'PO26000059',vendor:'נורטק',desc:'עריכה Vensica Product label',project:'Vensica',pm:'',amount:'1,420',currency:'$',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
   {id:22,po:'PO26000064',vendor:'איים סולדר ישראל בע"מ',desc:'חומרי הלחמה',project:'Sonolumi',pm:'',amount:'353',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
   {id:25,po:'PO26000066',vendor:'ריאון בע"מ',desc:'תוספת תשלום בגין setup להזרקות',project:'RBY',pm:'',amount:'1,400',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
@@ -504,9 +393,34 @@ var DEFAULT_ORDERS = [
   {id:32,po:'PO26000072',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית',desc:'חלקים מזכוכית למתקן זרימה',project:'PARAVESCULAR',pm:'',amount:'1800',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
 ];
  
+var reqs=DEFAULT_REQS.slice(),orders=[],activeFilter='all',reqFilter='all';
+var rNid=6,nid=33,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
+var sortCol=null,sortDir=1,reqSortCol=null,reqSortDir=1;
+ 
+// ── SYNC ──
+function setSyncStatus(s,m){var p=document.getElementById('sync-pill'),t=document.getElementById('sync-text');p.className='sync-pill '+s;t.textContent=m;}
+ 
+// ── SAVE ──
+function saveOrders(){
+  setSyncStatus('syncing','שומר...');
+  var flat=orders.map(function(o){
+    return {id:o.id,po:o.po,vendor:o.vendor,quoteNum:o.quoteNum||'',desc:o.desc,project:o.project,pm:o.pm||'',amount:o.amount,currency:o.currency||'₪',clientApproval:o.clientApproval||'',sentToVendor:o.sentToVendor?'1':'0',deliveryDate:o.deliveryDate||'',shipResp:o.shipResp||'',shipCost:o.shipCost||'',shipCurrency:o.shipCurrency||'₪',shipClientApproval:o.shipClientApproval||'',tracking:o.tracking||'',arrived:o.arrived?'1':'0',qc:o.qc||'',notes:o.notes||'',status:o.status||'פתוח',paid:o.paid?'1':'0',clientPaid:o.clientPaid?'1':'0',billed:o.billed||''};
+  });
+  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_all',orders:flat})})
+    .then(function(r){return r.json();})
+    .then(function(d){setSyncStatus(d.ok?'ok':'err',d.ok?'נשמר ✓':'שגיאה');})
+    .catch(function(){setSyncStatus('err','אין חיבור');});
+}
+ 
+function saveReqs(){
+  var flat=reqs.map(function(r){return {id:r.id,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:r.amount||'',currency:r.currency||'₪',approved:r.approved?'1':'0',handled:r.handled?'1':'0'};});
+  fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:flat})}).then(function(r){return r.json();}).catch(function(){});
+}
+ 
+// ── MIGRATE ──
 function migrateOrder(r){
   function toBool(v){return v==='1'||v===1||v==='true'||v===true;}
-  function toTriState(v){if(v==='כן'||v==='N/A')return v;return toBool(v)?'כן':'';}
+  function toTriState(v){if(v==='כן'||v==='N/A'||v==='')return v;return toBool(v)?'כן':'';}
   function splitAC(amt,cur){
     var a=String(amt||''),c=String(cur||'');
     if(a.indexOf('$')!==-1){c='$';a=a.replace(/[$]/g,'').trim();}
@@ -515,125 +429,83 @@ function migrateOrder(r){
     if(c!=='$'&&c!=='€')c='₪';
     return {a:a.trim(),c:c};
   }
-  // תמיכה בכותרות עבריות ואנגליות כאחד
-  function f(eng,heb){return r[eng]!==undefined&&r[eng]!==''&&r[eng]!==null?r[eng]:(r[heb]!==undefined?r[heb]:'');}
-  var ac=splitAC(f('amount','סכום'), f('currency','מטבע'));
-  var sc=splitAC(f('shipCost','עלות משלוח'), f('shipCurrency','מטבע משלוח'));
-  return {
-    id:Number(f('id','ID'))||0,
-    po:f('po','PO')||'',
-    vendor:f('vendor','ספק')||'',
-    quoteNum:f('quoteNum','מס הצעה')||'',
-    desc:f('desc','תיאור')||'',
-    project:f('project','פרויקט')||'',
-    pm:f('pm','מנהל פרויקט')||'',
-    amount:ac.a,currency:ac.c,
-    clientApproval:toTriState(f('clientApproval','אישור לקוח')),
-    sentToVendor:toBool(f('sentToVendor','שליחה לספק')),
-    deliveryDate:f('deliveryDate','תאריך אספקה')||'',
-    shipResp:f('shipResp','משלוח באחריות')||'',
-    shipCost:sc.a,shipCurrency:sc.c,
-    shipClientApproval:toTriState(f('shipClientApproval','אישור לקוח משלוח')),
-    tracking:f('tracking','מספר מעקב')||'',
-    arrived:toBool(f('arrived','קבלת סחורה')),
-    qc:toTriState(f('qc','QC')),
-    notes:f('notes','הערות')||'',
-    status:f('status','סטטוס')||'פתוח',
-    paid:toBool(f('paid','שולם לספק')),
-    clientPaid:toBool(f('clientPaid','לקוח שילם')),
-    billed:toTriState(f('billed','לקוח חוייב')),
-  };
+  function f(k){return r[k]!==undefined&&r[k]!==null?r[k]:'';}
+  var ac=splitAC(f('amount'),f('currency'));
+  var sc=splitAC(f('shipCost'),f('shipCurrency'));
+  return {id:Number(f('id'))||0,po:f('po')||'',vendor:f('vendor')||'',quoteNum:f('quoteNum')||'',desc:f('desc')||'',project:f('project')||'',pm:f('pm')||'',amount:ac.a,currency:ac.c,clientApproval:toTriState(f('clientApproval')),sentToVendor:toBool(f('sentToVendor')),deliveryDate:f('deliveryDate')||'',shipResp:f('shipResp')||'',shipCost:sc.a,shipCurrency:sc.c,shipClientApproval:toTriState(f('shipClientApproval')),tracking:f('tracking')||'',arrived:toBool(f('arrived')),qc:toTriState(f('qc')),notes:f('notes')||'',status:f('status')||'פתוח',paid:toBool(f('paid')),clientPaid:toBool(f('clientPaid')),billed:toTriState(f('billed'))};
 }
  
+// ── LOAD ──
 function loadAll(silent){
-  if(!silent){document.getElementById('loading-overlay').classList.remove('hidden');}
+  if(!silent)document.getElementById('loading-overlay').classList.remove('hidden');
   setSyncStatus('syncing',silent?'מרענן...':'טוען...');
- 
   fetch(GS_URL)
     .then(function(r){return r.json();})
     .then(function(d){
-      if(Array.isArray(d)&&d.length){
-        orders=d.map(migrateOrder);
-        var ids=orders.map(function(o){return o.id||0;});
-        nid=ids.length?Math.max.apply(null,ids)+1:1;
-      } else {
-        // Sheets ריק — טען את הנתונים השמורים
-        orders=DEFAULT_ORDERS.map(migrateOrder);
-        nid=33;
-        saveOrders();
-      }
+      if(Array.isArray(d)&&d.length){orders=d.map(migrateOrder);var ids=orders.map(function(o){return o.id||0;});nid=ids.length?Math.max.apply(null,ids)+1:1;}
+      else{orders=DEFAULT_ORDERS.map(migrateOrder);nid=33;saveOrders();}
     })
-    .catch(function(){
-      // אין חיבור — הצג נתוני ברירת מחדל
-      orders=DEFAULT_ORDERS.map(migrateOrder);
-      nid=33;
-    })
+    .catch(function(){orders=DEFAULT_ORDERS.map(migrateOrder);nid=33;})
     .finally(function(){
       fetch(GS_URL+'?sheet=reqs')
         .then(function(r){return r.json();})
         .then(function(d){
           if(Array.isArray(d)&&d.length){
-            reqs=d.map(function(r){
-              var handled=['true','1','TRUE'].indexOf(String(r.handled))!==-1;
-              var approved=['true','1','TRUE'].indexOf(String(r.approved))!==-1;
-              return {id:Number(r.id||r['ID'])||0,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:String(r.amount||''),currency:r.currency||'₪',approved:approved,handled:handled};
-            });
-            var rids=reqs.map(function(r){return r.id||0;});
-            rNid=rids.length?Math.max.apply(null,rids)+1:1;
-          } else {
-            reqs=DEFAULT_REQS.slice();
-            rNid=6;
-          }
+            reqs=d.map(function(r){return {id:Number(r.id)||0,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:String(r.amount||''),currency:r.currency||'₪',approved:['true','1','TRUE'].indexOf(String(r.approved))!==-1,handled:['true','1','TRUE'].indexOf(String(r.handled))!==-1};});
+            var rids=reqs.map(function(r){return r.id||0;});rNid=rids.length?Math.max.apply(null,rids)+1:6;
+          }else{reqs=DEFAULT_REQS.slice();rNid=6;}
         })
         .catch(function(){})
-        .finally(function(){
-          setSyncStatus('ok','מסונכרן ✓');
-          document.getElementById('loading-overlay').classList.add('hidden');
-          renderAll();
-        });
+        .finally(function(){setSyncStatus('ok','מסונכרן ✓');document.getElementById('loading-overlay').classList.add('hidden');renderAll();});
     });
 }
  
- 
- 
-// ── CONFIRM ──
+// ── UI HELPERS ──
 function showConfirm(msg,onYes){document.getElementById('confirm-msg').innerHTML=msg.replace('\n','<br>');pendingDeleteFn=onYes;document.getElementById('confirm-overlay').classList.add('open');}
 function closeConfirm(){document.getElementById('confirm-overlay').classList.remove('open');pendingDeleteFn=null;}
 document.getElementById('confirm-yes').addEventListener('click',function(){if(pendingDeleteFn)pendingDeleteFn();closeConfirm();});
 document.getElementById('confirm-no').addEventListener('click',closeConfirm);
 document.getElementById('confirm-overlay').addEventListener('click',function(e){if(e.target===e.currentTarget)closeConfirm();});
- 
-// ── TOAST ──
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+function copyText(text){if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){showToast('הועתק ✓');});}else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('הועתק ✓');}}
  
-// ── COPY ──
-function copyText(text){
-  if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){showToast('הועתק ✓');});}
-  else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('הועתק ✓');}
-}
- 
-// ── EDITABLE CELL ──
+// ── CELLS ──
 function makeEditCell(val,placeholder,onSave,tbodySelector){
   var td=document.createElement('td');
   var span=document.createElement('span');span.className='cell-text'+(val?'':' ph');span.textContent=val||placeholder;
   var inp=document.createElement('input');inp.className='cell-input';inp.value=val||'';inp.placeholder=placeholder;
   td.appendChild(span);td.appendChild(inp);
   td.addEventListener('click',function(){td.classList.add('editing');inp.focus();inp.select();});
-  inp.addEventListener('blur',function(){
-    td.classList.remove('editing');var v=inp.value.trim();
-    span.textContent=v||placeholder;span.className='cell-text'+(v?'':' ph');onSave(v);
-  });
+  inp.addEventListener('blur',function(){td.classList.remove('editing');var v=inp.value.trim();span.textContent=v||placeholder;span.className='cell-text'+(v?'':' ph');onSave(v);});
   inp.addEventListener('keydown',function(e){
     if(e.key==='Enter'){inp.blur();return;}
-    if(e.key==='Escape'){inp.value=val;inp.blur();return;}
+    if(e.key==='Escape'){inp.value=val||'';inp.blur();return;}
     if(e.key==='Tab'){
       e.preventDefault();inp.blur();
       var sel=tbodySelector||'#req-tbody';
-      var allFocusable=Array.from(document.querySelectorAll(sel+' .cell-input, '+sel+' .cell-select, '+sel+' .step-btn'));
-      var idx=allFocusable.indexOf(inp);var next=e.shiftKey?allFocusable[idx-1]:allFocusable[idx+1];
-      if(next){if(next.classList.contains('cell-input')){next.closest('td').classList.add('editing');}next.focus();if(next.select)next.select();}
+      var all=Array.from(document.querySelectorAll(sel+' .cell-input,'+sel+' .cell-select,'+sel+' .step-btn'));
+      var idx=all.indexOf(inp);var next=e.shiftKey?all[idx-1]:all[idx+1];
+      if(next){if(next.classList.contains('cell-input'))next.closest('td').classList.add('editing');next.focus();if(next.select)next.select();}
     }
   });
+  return td;
+}
+ 
+// ── תאריך עם slash אוטומטי ──
+function makeDateCell(val,onSave,tbodySelector){
+  var td=document.createElement('td');
+  var span=document.createElement('span');span.className='cell-text'+(val?'':' ph');span.textContent=val||'DD/MM/YYYY';
+  var inp=document.createElement('input');inp.className='cell-input';inp.value=val||'';inp.placeholder='DD/MM/YYYY';inp.maxLength=10;
+  td.appendChild(span);td.appendChild(inp);
+  td.addEventListener('click',function(){td.classList.add('editing');inp.focus();inp.select();});
+  inp.addEventListener('input',function(){
+    var v=inp.value.replace(/[^0-9]/g,'');
+    if(v.length>=3&&v.length<=4)v=v.slice(0,2)+'/'+v.slice(2);
+    else if(v.length>=5)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4,8);
+    inp.value=v;
+  });
+  inp.addEventListener('blur',function(){td.classList.remove('editing');var v=inp.value.trim();span.textContent=v||'DD/MM/YYYY';span.className='cell-text'+(v?'':' ph');onSave(v);});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter')inp.blur();if(e.key==='Escape'){inp.value=val||'';inp.blur();}});
   return td;
 }
  
@@ -657,59 +529,38 @@ function makeSelectCell(val,options,onSave){
 // ── REQ ROW ──
 function buildReqRow(r){
   var tr=document.createElement('tr');if(r.handled)tr.className='row-done';
-  [{val:r.requester,ph:'שם המבקש',key:'requester'},{val:r.project,ph:'פרויקט',key:'project'},{val:r.desc,ph:'תיאור...',key:'desc'},{val:r.vendor,ph:'ספק',key:'vendor'},{val:r.quoteNum,ph:'מס\' הצ"מ',key:'quoteNum'},{val:r.amount,ph:'0',key:'amount'}]
+  [{val:r.requester,ph:'שם המבקש',key:'requester'},{val:r.project,ph:'פרויקט',key:'project'},{val:r.desc,ph:'תיאור...',key:'desc'},{val:r.vendor,ph:'ספק',key:'vendor'},{val:r.quoteNum,ph:"מס' הצ\"מ",key:'quoteNum'},{val:r.amount,ph:'0',key:'amount'}]
   .forEach(function(f){
-    tr.appendChild(makeEditCell(f.val,f.ph,function(v){var row=reqs.find(function(x){return x.id===r.id;});if(row){row[f.key]=v;saveReqs();}},'#req-tbody, #archive-tbody'));
+    tr.appendChild(makeEditCell(f.val,f.ph,function(v){var row=reqs.find(function(x){return x.id===r.id;});if(row){row[f.key]=v;saveReqs();}},'#req-tbody,#archive-tbody'));
   });
   var curTd=document.createElement('td');curTd.className='step-cell';
   var sel=document.createElement('select');sel.className='cur-select';
   ['₪','$','€'].forEach(function(c){var opt=document.createElement('option');opt.value=c;opt.textContent=c;if(r.currency===c)opt.selected=true;sel.appendChild(opt);});
   sel.addEventListener('change',function(){var row=reqs.find(function(x){return x.id===r.id;});if(row){row.currency=sel.value;saveReqs();}});
   curTd.appendChild(sel);tr.appendChild(curTd);
-  tr.appendChild(makeStepBtn(r.approved,function(btn){var row=reqs.find(function(x){return x.id===r.id;});if(!row)return;row.approved=!row.approved;saveReqs();btn.className='step-btn'+(row.approved?' done':'');showToast(row.approved?'עלות אושרה ✓':'אישור בוטל');}));
+  tr.appendChild(makeStepBtn(r.approved,function(btn){var row=reqs.find(function(x){return x.id===r.id;});if(!row)return;row.approved=!row.approved;btn.className='step-btn'+(row.approved?' done':'');saveReqs();showToast(row.approved?'עלות אושרה ✓':'אישור בוטל');}));
   tr.appendChild(makeStepBtn(r.handled,function(){var row=reqs.find(function(x){return x.id===r.id;});if(!row)return;row.handled=!row.handled;saveReqs();renderReqs();showToast(row.handled?'הועבר לארכיון ✓':'הוחזר לרשימה');}));
   var delTd=document.createElement('td');delTd.style.padding='0 6px';
   var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';delBtn.textContent='✕';
-  delBtn.addEventListener('click',function(){showConfirm('האם את/ה בטוח/ה שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){reqs=reqs.filter(function(x){return x.id!==r.id;});saveReqs();renderReqs();showToast('שורה נמחקה');});});
+  delBtn.addEventListener('click',function(){showConfirm('האם בטוח שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){reqs=reqs.filter(function(x){return x.id!==r.id;});saveReqs();renderReqs();showToast('שורה נמחקה');});});
   delTd.appendChild(delBtn);tr.appendChild(delTd);return tr;
 }
  
-var reqSortCol=null,reqSortDir=1,reqFilter='all';
+// ── SORT/FILTER HELPERS ──
+function parseAmount(s){if(!s)return -Infinity;var n=parseFloat((s+'').replace(/[^0-9.-]/g,''));return isNaN(n)?-Infinity:n;}
+function smartCompare(a,b,col,dir){if(col==='amount'||col==='shipCost')return(parseAmount(a[col])-parseAmount(b[col]))*dir;return((a[col]||'').localeCompare(b[col]||'','he'))*dir;}
+function applyReqSort(list){if(!reqSortCol)return list;return list.slice().sort(function(a,b){return smartCompare(a,b,reqSortCol,reqSortDir);});}
+function applySort(list){if(!sortCol)return list;return list.slice().sort(function(a,b){return smartCompare(a,b,sortCol,sortDir);});}
  
-function parseAmount(s){
-  if(!s)return -Infinity;
-  var n=parseFloat((s+'').replace(/[^0-9.-]/g,'').replace(/,/g,''));
-  return isNaN(n)?-Infinity:n;
-}
-function smartCompare(a,b,col,dir){
-  var numericCols=['amount','shipCost'];
-  if(numericCols.indexOf(col)!==-1){
-    return (parseAmount(a[col])-parseAmount(b[col]))*dir;
-  }
-  return ((a[col]||'').localeCompare(b[col]||'','he'))*dir;
-}
- 
- 
-function applyReqSort(list){
-  if(!reqSortCol)return list;
-  return list.slice().sort(function(a,b){return smartCompare(a,b,reqSortCol,reqSortDir);});
-}
- 
+// ── RENDER REQS ──
 function renderReqs(){
-  var q=(document.getElementById('req-search')||{value:''}).value.toLowerCase();
+  var q=(document.getElementById('req-search').value||'').toLowerCase();
   var active=reqs.filter(function(r){return !r.handled;});
   var archived=reqs.filter(function(r){return r.handled===true;});
- 
-  // filter
-  if(reqFilter==='approved') active=active.filter(function(r){return r.approved;});
-  else if(reqFilter==='unapproved') active=active.filter(function(r){return !r.approved;});
- 
-  // search
-  if(q) active=active.filter(function(r){return (r.requester+' '+r.project+' '+r.vendor+' '+r.desc+' '+(r.quoteNum||'')).toLowerCase().indexOf(q)!==-1;});
- 
-  // sort
+  if(reqFilter==='approved')active=active.filter(function(r){return r.approved;});
+  else if(reqFilter==='unapproved')active=active.filter(function(r){return !r.approved;});
+  if(q)active=active.filter(function(r){return(r.requester+' '+r.project+' '+r.vendor+' '+r.desc+' '+(r.quoteNum||'')).toLowerCase().indexOf(q)!==-1;});
   active=applyReqSort(active);
- 
   document.getElementById('req-count-badge').textContent=active.length;
   document.getElementById('archive-count-badge').textContent=archived.length;
   var tbody=document.getElementById('req-tbody'),em=document.getElementById('req-empty');
@@ -717,13 +568,7 @@ function renderReqs(){
   if(!active.length){em.style.display='block';}else{em.style.display='none';active.forEach(function(r){tbody.appendChild(buildReqRow(r));});}
   var archiveWrap=document.getElementById('archive-wrap'),archiveTbody=document.getElementById('archive-tbody');
   archiveTbody.innerHTML='';
-  console.log('archived count:',archived.length, archived);
-  if(archived.length){
-    archiveWrap.style.display='block';
-    archived.forEach(function(r){archiveTbody.appendChild(buildReqRow(r));});
-  }else{
-    archiveWrap.style.display='none';
-  }
+  if(archived.length){archiveWrap.style.display='block';archived.forEach(function(r){archiveTbody.appendChild(buildReqRow(r));});}else{archiveWrap.style.display='none';}
 }
  
 function addReqRow(){
@@ -732,92 +577,26 @@ function addReqRow(){
   setTimeout(function(){var rows=document.querySelectorAll('#req-tbody tr');var last=rows[rows.length-1];if(last){var inp=last.querySelector('.cell-input');if(inp){last.querySelector('td').classList.add('editing');inp.focus();}}},30);
 }
  
-document.getElementById('archive-toggle-btn').addEventListener('click',function(){
-  archiveOpen=!archiveOpen;
-  document.getElementById('archive-body').style.display=archiveOpen?'block':'none';
-  document.getElementById('archive-toggle-btn').classList.toggle('open',archiveOpen);
-});
- 
-// סינון דרישות רכש
-document.getElementById('req-filters').addEventListener('click',function(e){
-  var btn=e.target.closest('.pill');if(!btn)return;
-  document.querySelectorAll('#req-filters .pill').forEach(function(p){p.classList.remove('active');});
-  btn.classList.add('active');
-  reqFilter=btn.getAttribute('data-filter');
-  renderReqs();
-});
- 
-// חיפוש דרישות רכש
-document.getElementById('req-search').addEventListener('input',renderReqs);
- 
-// מיון דרישות רכש
-document.querySelector('.req-table').addEventListener('click',function(e){
-  var th=e.target.closest('.req-sort');if(!th)return;
-  var col=th.getAttribute('data-col');
-  if(reqSortCol===col){reqSortDir*=-1;}else{reqSortCol=col;reqSortDir=1;}
-  document.querySelectorAll('.req-table .sort-arrow').forEach(function(a){a.className='sort-arrow';});
-  var arrow=th.querySelector('.sort-arrow');if(arrow)arrow.className='sort-arrow '+(reqSortDir===1?'asc':'desc');
-  renderReqs();
-});
- 
 // ── ORDERS ──
-var sortCol=null,sortDir=1,closedOpen=true;
- 
 function drawDonut(canvas,open,closed,cancelled){
-  var ctx=canvas.getContext('2d');
-  var total=open+closed+cancelled||1;
-  var segs=[
-    {val:open,color:'#3b6ef5'},
-    {val:closed,color:'#00b896'},
-    {val:cancelled,color:'#e8324f'}
-  ];
-  ctx.clearRect(0,0,48,48);
-  var start=-Math.PI/2,cx=24,cy=24,r=20,ir=13;
-  segs.forEach(function(s){
-    if(!s.val)return;
-    var angle=s.val/total*Math.PI*2;
-    ctx.beginPath();ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,start,start+angle);
-    ctx.closePath();ctx.fillStyle=s.color;ctx.fill();
-    start+=angle;
-  });
-  ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);
-  ctx.fillStyle='#fff';ctx.fill();
+  var ctx=canvas.getContext('2d'),total=open+closed+cancelled||1,segs=[{val:open,color:'#3b6ef5'},{val:closed,color:'#00b896'},{val:cancelled,color:'#e8324f'}];
+  ctx.clearRect(0,0,48,48);var start=-Math.PI/2,cx=24,cy=24,r=20,ir=13;
+  segs.forEach(function(s){if(!s.val)return;var angle=s.val/total*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+angle);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();start+=angle;});
+  ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
 }
  
 function renderStats(){
-  var t=orders.length,
-      open=orders.filter(function(o){return o.status==='פתוח';}).length,
-      closed=orders.filter(function(o){return o.status==='סגור';}).length,
-      cancelled=orders.filter(function(o){return o.status==='בוטל';}).length,
-      arrived=orders.filter(function(o){return o.arrived;}).length,
-      paid=orders.filter(function(o){return o.paid;}).length,
-      unpaid=t-paid;
+  var t=orders.length,open=orders.filter(function(o){return o.status==='פתוח';}).length,closed=orders.filter(function(o){return o.status==='סגור';}).length,cancelled=orders.filter(function(o){return o.status==='בוטל';}).length,arrived=orders.filter(function(o){return o.arrived;}).length,paid=orders.filter(function(o){return o.paid;}).length;
   var el=document.getElementById('stats');if(!el)return;
-  el.innerHTML=
-    '<div class="stat"><div class="stat-label">סה"כ הזמנות</div><div class="stat-value">'+t+'</div></div>'+
-    '<div class="stat"><div class="stat-label">פתוחות</div><div class="stat-value accent">'+open+'</div></div>'+
-    '<div class="stat"><div class="stat-label">סגורות</div><div class="stat-value success">'+closed+'</div></div>'+
-    '<div class="stat"><div class="stat-label">בוטלו</div><div class="stat-value danger">'+cancelled+'</div></div>'+
-    '<div class="stat"><div class="stat-label">התקבלו</div><div class="stat-value success">'+arrived+'</div></div>'+
-    '<div class="stat"><div class="stat-label">שולם ✓</div><div class="stat-value accent">'+paid+'</div></div>'+
-    '<div class="stat"><div class="stat-label">טרם שולם</div><div class="stat-value danger">'+unpaid+'</div></div>';
+  el.innerHTML='<div class="stat"><div class="stat-label">סה"כ הזמנות</div><div class="stat-value">'+t+'</div></div><div class="stat"><div class="stat-label">פתוחות</div><div class="stat-value accent">'+open+'</div></div><div class="stat"><div class="stat-label">סגורות</div><div class="stat-value success">'+closed+'</div></div><div class="stat"><div class="stat-label">בוטלו</div><div class="stat-value danger">'+cancelled+'</div></div><div class="stat"><div class="stat-label">התקבלו</div><div class="stat-value success">'+arrived+'</div></div><div class="stat"><div class="stat-label">שולם ✓</div><div class="stat-value accent">'+paid+'</div></div><div class="stat"><div class="stat-label">טרם שולם</div><div class="stat-value danger">'+(t-paid)+'</div></div>';
 }
  
 function renderDashboard(){
   var projects={};
-  orders.forEach(function(o){
-    var p=o.project||'ללא פרויקט';
-    if(!projects[p])projects[p]={open:0,closed:0,cancelled:0};
-    if(o.status==='סגור')projects[p].closed++;
-    else if(o.status==='בוטל')projects[p].cancelled++;
-    else projects[p].open++;
-  });
-  var dash=document.getElementById('dashboard');
-  dash.innerHTML='';
+  orders.forEach(function(o){var p=o.project||'ללא פרויקט';if(!projects[p])projects[p]={open:0,closed:0,cancelled:0};if(o.status==='סגור')projects[p].closed++;else if(o.status==='בוטל')projects[p].cancelled++;else projects[p].open++;});
+  var dash=document.getElementById('dashboard');dash.innerHTML='';
   Object.keys(projects).forEach(function(p){
-    var d=projects[p];
-    var total=d.open+d.closed+d.cancelled;
+    var d=projects[p],total=d.open+d.closed+d.cancelled;
     var card=document.createElement('div');card.className='dash-card';
     var donutWrap=document.createElement('div');donutWrap.className='dash-donut';
     var canvas=document.createElement('canvas');canvas.width=48;canvas.height=48;
@@ -825,55 +604,27 @@ function renderDashboard(){
     donutWrap.appendChild(canvas);donutWrap.appendChild(totalSpan);
     setTimeout(function(){drawDonut(canvas,d.open,d.closed,d.cancelled);},0);
     var info=document.createElement('div');info.className='dash-info';
-    info.innerHTML='<div class="dash-project">'+p+'</div><div class="dash-legend">'+
-      (d.open?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#3b6ef5"></span>פתוח: '+d.open+'</div>':'')+
-      (d.closed?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#00b896"></span>סגור: '+d.closed+'</div>':'')+
-      (d.cancelled?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#e8324f"></span>בוטל: '+d.cancelled+'</div>':'')+
-      '</div>';
+    info.innerHTML='<div class="dash-project">'+p+'</div><div class="dash-legend">'+(d.open?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#3b6ef5"></span>פתוח: '+d.open+'</div>':'')+(d.closed?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#00b896"></span>סגור: '+d.closed+'</div>':'')+(d.cancelled?'<div class="dash-legend-item"><span class="dash-legend-dot" style="background:#e8324f"></span>בוטל: '+d.cancelled+'</div>':'')+'</div>';
     card.appendChild(donutWrap);card.appendChild(info);dash.appendChild(card);
   });
 }
  
 function buildOrderRow(o){
-  var tr=document.createElement('tr');
-  tr.className='row-'+(o.status||'פתוח');
- 
-  // PO - מונוספייס כחול
+  var tr=document.createElement('tr');tr.className='row-'+(o.status||'פתוח');
   var poTd=makeEditCell(o.po,'PO',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.po=v;saveOrders();}},'#tbody,#closed-tbody');
   poTd.querySelector('.cell-text').style.cssText='display:block;width:100%;min-height:44px;padding:0 10px;line-height:44px;font-weight:700;font-size:12px;font-family:Courier New,monospace;color:var(--accent);';
   tr.appendChild(poTd);
- 
-  // שדות טקסט רגילים
   [{val:o.vendor,ph:'ספק',key:'vendor'},{val:o.quoteNum,ph:'מס הצעה',key:'quoteNum'},{val:o.desc,ph:'תיאור',key:'desc'},{val:o.project,ph:'פרויקט',key:'project'},{val:o.pm,ph:'מנהל פרויקט',key:'pm'},{val:o.amount,ph:'סכום',key:'amount'}]
-  .forEach(function(f){
-    tr.appendChild(makeEditCell(f.val,f.ph,function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord[f.key]=v;saveOrders();renderDashboard();}},'#tbody,#closed-tbody'));
-  });
- 
-  // מטבע
+  .forEach(function(f){tr.appendChild(makeEditCell(f.val,f.ph,function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord[f.key]=v;saveOrders();renderDashboard();}},'#tbody,#closed-tbody'));});
   tr.appendChild(makeSelectCell(o.currency||'₪',['₪','$','€'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.currency=v;saveOrders();}}));
- 
-  // אישור לקוח
   tr.appendChild(makeSelectCell(o.clientApproval||'',['','כן','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.clientApproval=v;saveOrders();}}));
- 
-  // שליחה לספק
   tr.appendChild(makeStepBtn(o.sentToVendor,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.sentToVendor=!ord.sentToVendor;btn.className='step-btn'+(ord.sentToVendor?' done':'');saveOrders();}));
- 
-  // תאריך אספקה
-  tr.appendChild(makeEditCell(o.deliveryDate,'DD/MM/YYYY',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.deliveryDate=v;saveOrders();}},'#tbody,#closed-tbody'));
- 
-  // משלוח באחריות
+  tr.appendChild(makeDateCell(o.deliveryDate,function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.deliveryDate=v;saveOrders();}},'#tbody,#closed-tbody'));
   tr.appendChild(makeSelectCell(o.shipResp||'',['','ספק','פרפלאו','הלקוח','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipResp=v;saveOrders();}}));
- 
-  // עלות משלוח
   tr.appendChild(makeEditCell(o.shipCost,'עלות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipCost=v;saveOrders();}},'#tbody,#closed-tbody'));
- 
-  // מטבע משלוח
   tr.appendChild(makeSelectCell(o.shipCurrency||'₪',['₪','$','€'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipCurrency=v;saveOrders();}}));
- 
-  // אישור לקוח משלוח
   tr.appendChild(makeSelectCell(o.shipClientApproval||'',['','כן','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.shipClientApproval=v;saveOrders();}}));
- 
-  // מספר מעקב + העתק
+  // מספר מעקב
   var trTd=document.createElement('td');
   var wrap=document.createElement('div');wrap.className='tracking-wrap';
   var tval=document.createElement('span');tval.className='tracking-val'+(o.tracking?'':' ph');tval.textContent=o.tracking||'הוסף...';
@@ -882,50 +633,20 @@ function buildOrderRow(o){
   cpBtn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" width="11" height="11"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M2 10V2h8"/></svg>';
   cpBtn.addEventListener('click',function(e){e.stopPropagation();if(o.tracking)copyText(o.tracking);else showToast('אין מספר מעקב');});
   tval.addEventListener('click',function(){tval.style.display='none';tinp.style.display='block';tinp.focus();tinp.select();});
-  tinp.addEventListener('blur',function(){
-    var v=tinp.value.trim();tval.textContent=v||'הוסף...';tval.className='tracking-val'+(v?'':' ph');tval.style.display='';tinp.style.display='none';
-    var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.tracking=v;saveOrders();}
-  });
+  tinp.addEventListener('blur',function(){var v=tinp.value.trim();tval.textContent=v||'הוסף...';tval.className='tracking-val'+(v?'':' ph');tval.style.display='';tinp.style.display='none';var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.tracking=v;saveOrders();}});
   tinp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key==='Escape')tinp.blur();});
   wrap.appendChild(tval);wrap.appendChild(tinp);wrap.appendChild(cpBtn);trTd.appendChild(wrap);tr.appendChild(trTd);
- 
-  // קבלת סחורה
   tr.appendChild(makeStepBtn(o.arrived,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.arrived=!ord.arrived;btn.className='step-btn'+(ord.arrived?' done':'');saveOrders();}));
- 
-  // QC
-  tr.appendChild(makeSelectCell(o.qc||'',['','כן','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.qc=v;saveOrders();}}));
- 
-  // לקוח חוייב - dropdown כן/N/A (לפני שולם)
+  // QC - בתהליך/בוצע/N/A
+  tr.appendChild(makeSelectCell(o.qc||'',['','בתהליך','בוצע','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.qc=v;saveOrders();}}));
   tr.appendChild(makeSelectCell(o.billed||'',['','כן','N/A'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.billed=v;saveOrders();}}));
- 
-  // שולם לספק - כפתור וי
-  tr.appendChild(makeStepBtn(o.paid,function(btn){
-    var ord=orders.find(function(x){return x.id===o.id;});
-    if(!ord)return;
-    ord.paid=!ord.paid;
-    btn.className='step-btn'+(ord.paid?' done paid-style':'');
-    saveOrders();renderStats();
-  },'paid-style'));
- 
-  // לקוח שילם - כפתור וי
-  tr.appendChild(makeStepBtn(o.clientPaid,function(btn){
-    var ord=orders.find(function(x){return x.id===o.id;});
-    if(!ord)return;
-    ord.clientPaid=!ord.clientPaid;
-    btn.className='step-btn'+(ord.clientPaid?' done client-paid-style':'');
-    saveOrders();
-  },'client-paid-style'));
- 
-  // הערות
-  tr.appendChild(makeEditCell(o.notes,'הערות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.notes=v;saveOrders();}},"#tbody,#closed-tbody"));
- 
-  // סטטוס
+  tr.appendChild(makeStepBtn(o.paid,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.paid=!ord.paid;btn.className='step-btn'+(ord.paid?' done paid-style':'');saveOrders();renderStats();},'paid-style'));
+  tr.appendChild(makeStepBtn(o.clientPaid,function(btn){var ord=orders.find(function(x){return x.id===o.id;});if(!ord)return;ord.clientPaid=!ord.clientPaid;btn.className='step-btn'+(ord.clientPaid?' done client-paid-style':'');saveOrders();},'client-paid-style'));
+  tr.appendChild(makeEditCell(o.notes,'הערות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.notes=v;saveOrders();}},'#tbody,#closed-tbody'));
   tr.appendChild(makeSelectCell(o.status||'פתוח',['פתוח','סגור','בוטל'],function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.status=v;saveOrders();renderAll();}}));
- 
-  // מחיקה
   var acTd=document.createElement('td');
   var delBtn=document.createElement('button');delBtn.className='btn btn-sm btn-danger';delBtn.textContent='✕';
-  delBtn.addEventListener('click',(function(oid){return function(){showConfirm('האם את/ה בטוח/ה שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){orders=orders.filter(function(x){return x.id!==oid;});saveOrders();renderAll();showToast('הזמנה נמחקה');});}})(o.id));
+  delBtn.addEventListener('click',(function(oid){return function(){showConfirm('האם בטוח שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){orders=orders.filter(function(x){return x.id!==oid;});saveOrders();renderAll();showToast('הזמנה נמחקה');});}})(o.id));
   var div=document.createElement('div');div.className='row-actions';div.appendChild(delBtn);acTd.appendChild(div);tr.appendChild(acTd);
   return tr;
 }
@@ -933,7 +654,6 @@ function buildOrderRow(o){
 function addOrderRow(){
   var o={id:nid++,po:'',vendor:'',quoteNum:'',desc:'',project:'',pm:'',amount:'',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''};
   orders.push(o);
-  // reset filter so new row is always visible
   activeFilter='all';
   document.querySelectorAll('#filters .pill').forEach(function(p){p.classList.remove('active');});
   var allPill=document.querySelector('#filters .pill[data-filter="all"]');if(allPill)allPill.classList.add('active');
@@ -941,31 +661,17 @@ function addOrderRow(){
   setTimeout(function(){var rows=document.querySelectorAll('#tbody tr');var last=rows[rows.length-1];if(last){last.scrollIntoView({block:'center',behavior:'smooth'});var inp=last.querySelector('.cell-input');if(inp){last.querySelector('td').classList.add('editing');inp.focus();}}},60);
 }
  
-function applySort(list){
-  if(!sortCol)return list;
-  return list.slice().sort(function(a,b){return smartCompare(a,b,sortCol,sortDir);});
-}
- 
 function renderTable(){
   var q=document.getElementById('search').value.toLowerCase();
   var active=orders.filter(function(o){return o.status!=='סגור'&&o.status!=='בוטל';});
   var closed=orders.filter(function(o){return o.status==='סגור'||o.status==='בוטל';});
-  if(activeFilter!=='all'){
-    active=active.filter(function(o){return o.status===activeFilter;});
-    closed=closed.filter(function(o){return o.status===activeFilter;});
-  }
-  if(q){
-    var filt=function(o){return (o.po+' '+o.vendor+' '+o.project+' '+o.desc+' '+(o.pm||'')).toLowerCase().indexOf(q)!==-1;};
-    active=active.filter(filt);closed=closed.filter(filt);
-  }
+  if(activeFilter!=='all'){active=active.filter(function(o){return o.status===activeFilter;});closed=closed.filter(function(o){return o.status===activeFilter;});}
+  if(q){var filt=function(o){return(o.po+' '+o.vendor+' '+o.project+' '+o.desc+' '+(o.pm||'')).toLowerCase().indexOf(q)!==-1;};active=active.filter(filt);closed=closed.filter(filt);}
   active=applySort(active);closed=applySort(closed);
- 
   var tbody=document.getElementById('tbody'),em=document.getElementById('empty-msg');
   tbody.innerHTML='';
   if(!active.length){em.style.display='block';}else{em.style.display='none';active.forEach(function(o){tbody.appendChild(buildOrderRow(o));});}
- 
-  var ctbody=document.getElementById('closed-tbody');
-  ctbody.innerHTML='';
+  var ctbody=document.getElementById('closed-tbody');ctbody.innerHTML='';
   closed.forEach(function(o){ctbody.appendChild(buildOrderRow(o));});
   document.getElementById('closed-count-badge').textContent=closed.length;
   document.getElementById('closed-wrap').style.display=closed.length?'block':'none';
@@ -974,16 +680,17 @@ function renderTable(){
 function renderAll(){document.getElementById('orders-count-badge').textContent=orders.length;renderStats();renderDashboard();renderTable();renderReqs();}
  
 function exportXLSX(){
-  var rH=['שם המבקש','פרויקט','תיאור כללי','ספק','מס\' הצעת מחיר','סכום','מטבע','אישור לקוח','סטטוס'];
-  var rR=reqs.map(function(r){return [r.requester,r.project,r.desc,r.vendor,r.quoteNum||'',r.amount,r.currency||'₪',r.approved?'מאושר':'ממתין',r.handled?'טופל':'פעיל'];});
-  var ws1=XLSX.utils.aoa_to_sheet([rH].concat(rR));ws1['!cols']=[{wch:16},{wch:12},{wch:30},{wch:16},{wch:16},{wch:12},{wch:8},{wch:12},{wch:10}];
-  var oH=['PO','ספק','מס הצעה','תיאור','פרויקט','מנהל פרויקט','סכום','מטבע','אישור לקוח','שליחה לספק','תאריך אספקה','משלוח באחריות','עלות משלוח','מטבע משלוח','אישור לקוח משלוח','מספר מעקב','התקבל','QC','הערות','סטטוס'];
-  var oR=orders.map(function(o){return [o.po,o.vendor,o.quoteNum||'',o.desc,o.project,o.pm||'',o.amount,o.currency||'₪',o.clientApproval?'✓':'',o.sentToVendor?'✓':'',o.deliveryDate||'',o.shipResp||'',o.shipCost||'',o.shipCurrency||'₪',o.shipClientApproval?'✓':'',o.tracking||'',o.arrived?'✓':'',o.qc?'✓':'',o.notes||'',o.status||'פתוח'];});
-  var ws2=XLSX.utils.aoa_to_sheet([oH].concat(oR));ws2['!cols']=[{wch:16},{wch:14},{wch:14},{wch:22},{wch:12},{wch:14},{wch:10},{wch:8},{wch:10},{wch:10},{wch:12},{wch:12},{wch:12},{wch:8},{wch:10},{wch:18},{wch:8},{wch:8},{wch:20},{wch:10}];
+  var rH=['שם המבקש','פרויקט','תיאור כללי','ספק',"מס' הצעת מחיר",'סכום','מטבע','אישור לקוח','סטטוס'];
+  var rR=reqs.map(function(r){return[r.requester,r.project,r.desc,r.vendor,r.quoteNum||'',r.amount,r.currency||'₪',r.approved?'מאושר':'ממתין',r.handled?'טופל':'פעיל'];});
+  var ws1=XLSX.utils.aoa_to_sheet([rH].concat(rR));
+  var oH=['PO','ספק','מס הצעה','תיאור','פרויקט','מנהל פרויקט','סכום','מטבע','אישור לקוח','שליחה לספק','תאריך אספקה','משלוח באחריות','עלות משלוח','מטבע משלוח','אישור לקוח משלוח','מספר מעקב','קבלת סחורה','QC','לקוח חוייב','שולם לספק','לקוח שילם','הערות','סטטוס'];
+  var oR=orders.map(function(o){return[o.po,o.vendor,o.quoteNum||'',o.desc,o.project,o.pm||'',o.amount,o.currency||'₪',o.clientApproval||'',o.sentToVendor?'✓':'',o.deliveryDate||'',o.shipResp||'',o.shipCost||'',o.shipCurrency||'₪',o.shipClientApproval||'',o.tracking||'',o.arrived?'✓':'',o.qc||'',o.billed||'',o.paid?'✓':'',o.clientPaid?'✓':'',o.notes||'',o.status||'פתוח'];});
+  var ws2=XLSX.utils.aoa_to_sheet([oH].concat(oR));
   var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws1,'דרישות רכש');XLSX.utils.book_append_sheet(wb,ws2,'הזמנות');
   XLSX.writeFile(wb,'מעקב_הזמנות_לקוחות.xlsx');showToast('Excel יוצא בהצלחה ✓');
 }
  
+// ── EVENTS ──
 document.getElementById('btn-refresh').addEventListener('click',function(){loadAll(false);});
 document.getElementById('btn-export').addEventListener('click',exportXLSX);
 document.getElementById('btn-new-order').addEventListener('click',addOrderRow);
@@ -992,57 +699,59 @@ document.getElementById('btn-add-order').addEventListener('click',addOrderRow);
 document.getElementById('search').addEventListener('input',renderTable);
 document.getElementById('filters').addEventListener('click',function(e){
   var btn=e.target.closest('.pill');if(!btn)return;
-  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('active');});btn.classList.add('active');
+  document.querySelectorAll('#filters .pill').forEach(function(p){p.classList.remove('active');});btn.classList.add('active');
   activeFilter=btn.getAttribute('data-filter');renderAll();
 });
- 
-// מיון עמודות
 document.getElementById('orders-table').addEventListener('click',function(e){
   var th=e.target.closest('.col-sort');if(!th)return;
   var col=th.getAttribute('data-col');
   if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
-  document.querySelectorAll('.sort-arrow').forEach(function(a){a.className='sort-arrow';});
+  document.querySelectorAll('#orders-table .sort-arrow').forEach(function(a){a.className='sort-arrow';});
   var arrow=th.querySelector('.sort-arrow');if(arrow)arrow.className='sort-arrow '+(sortDir===1?'asc':'desc');
   renderTable();
 });
- 
 document.getElementById('closed-toggle-btn').addEventListener('click',function(){
   closedOpen=!closedOpen;
   document.getElementById('closed-body').style.display=closedOpen?'block':'none';
   document.getElementById('closed-toggle-btn').classList.toggle('open',closedOpen);
 });
- 
+document.getElementById('archive-toggle-btn').addEventListener('click',function(){
+  archiveOpen=!archiveOpen;
+  document.getElementById('archive-body').style.display=archiveOpen?'block':'none';
+  document.getElementById('archive-toggle-btn').classList.toggle('open',archiveOpen);
+});
+document.getElementById('req-filters').addEventListener('click',function(e){
+  var btn=e.target.closest('.pill');if(!btn)return;
+  document.querySelectorAll('#req-filters .pill').forEach(function(p){p.classList.remove('active');});btn.classList.add('active');
+  reqFilter=btn.getAttribute('data-filter');renderReqs();
+});
+document.getElementById('req-search').addEventListener('input',renderReqs);
+document.querySelector('.req-table').addEventListener('click',function(e){
+  var th=e.target.closest('.req-sort');if(!th)return;
+  var col=th.getAttribute('data-col');
+  if(reqSortCol===col){reqSortDir*=-1;}else{reqSortCol=col;reqSortDir=1;}
+  document.querySelectorAll('.req-table .sort-arrow').forEach(function(a){a.className='sort-arrow';});
+  var arrow=th.querySelector('.sort-arrow');if(arrow)arrow.className='sort-arrow '+(reqSortDir===1?'asc':'desc');
+  renderReqs();
+});
+document.getElementById('btn-download-src').addEventListener('click',function(){
+  var html=document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();URL.revokeObjectURL(a.href);showToast('הקובץ הורד ✓');
+});
  
 // ── LOGIN ──
-var PASSWORD = 'PFTM7942';
-function checkLogin() {
-  var val = document.getElementById('login-input').value;
-  if (val === PASSWORD) {
-    document.getElementById('login-overlay').style.display = 'none';
+function checkLogin(){
+  if(document.getElementById('login-input').value===PASSWORD){
+    document.getElementById('login-overlay').style.display='none';
     loadAll(false);
-  } else {
-    document.getElementById('login-err').textContent = 'סיסמה שגויה, נסה שוב';
-    document.getElementById('login-input').value = '';
+  }else{
+    document.getElementById('login-err').textContent='סיסמה שגויה, נסה שוב';
+    document.getElementById('login-input').value='';
     document.getElementById('login-input').focus();
   }
 }
-document.getElementById('login-btn').addEventListener('click', checkLogin);
-document.getElementById('login-input').addEventListener('keydown', function(e){ if(e.key==='Enter') checkLogin(); });
- 
- 
-// ── הורדת קוד מקור ──
-document.getElementById('btn-download-src').addEventListener('click', function(){
-  var html = document.documentElement.outerHTML;
-  var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'index.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast('הקובץ הורד ✓');
-});
- 
+document.getElementById('login-btn').addEventListener('click',checkLogin);
+document.getElementById('login-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkLogin();});
 </script>
- 
- 
 </body></html>
