@@ -61,7 +61,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem;}
 .tbl-wrap{overflow-x:auto;overflow-y:auto;max-height:60vh;}
 table{width:100%;border-collapse:collapse;}
- 
+
 /* ── STICKY HEADERS ── */
 .orders-tbl thead{position:sticky;top:0;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.06);}
 .orders-tbl thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
@@ -69,14 +69,14 @@ table{width:100%;border-collapse:collapse;}
 .orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
 .orders-tbl thead tr:first-child th.group-status{color:var(--warn);background:rgba(232,150,10,0.05);}
 .orders-tbl thead tr:last-child th{background:var(--surface2);text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
- 
+
 /* ── STICKY FIRST 2 COLUMNS ── */
 .orders-tbl th:nth-child(1),.orders-tbl td:nth-child(1){position:sticky;right:0;z-index:5;background:var(--surface);box-shadow:-2px 0 4px rgba(0,0,0,0.06);}
 .orders-tbl th:nth-child(2),.orders-tbl td:nth-child(2){position:sticky;right:130px;z-index:5;background:var(--surface);}
 .orders-tbl thead th:nth-child(1),.orders-tbl thead th:nth-child(2){z-index:11;background:var(--surface2);}
 tbody tr.row-סגור td:nth-child(1),tbody tr.row-סגור td:nth-child(2){background:rgba(0,184,150,0.06)!important;}
 tbody tr.row-בוטל td:nth-child(1),tbody tr.row-בוטל td:nth-child(2){background:rgba(232,50,79,0.05)!important;}
- 
+
 td{padding:0;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;text-align:right;height:44px;border-left:1px solid var(--border);}
 td:last-child{border-left:none;}
 tr:last-child td{border-bottom:none;}
@@ -88,7 +88,7 @@ tbody tr.row-בוטל:hover td{background:rgba(232,50,79,0.09);}
 tbody tr.row-פתוח:hover td{background:rgba(59,110,245,0.025);}
 tbody tr.row-done td{background:rgba(0,0,0,0.015);}
 tbody tr.row-done .cell-text{color:var(--text3);text-decoration:line-through;}
- 
+
 .cell-text{display:block;width:100%;min-height:44px;padding:0 10px;line-height:44px;cursor:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text);}
 .cell-text.ph{color:var(--text3);}
 .cell-input{display:none;width:100%;height:44px;padding:0 10px;border:none;outline:2px solid var(--accent);outline-offset:-2px;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text);background:rgba(59,110,245,0.05);}
@@ -174,7 +174,7 @@ td.editing .cell-input{display:block;}
 </style>
 </head>
 <body>
- 
+
 <div class="login-overlay" id="login-overlay" style="display:flex;">
   <div class="login-box">
     <div class="login-icon">HZ</div>
@@ -185,12 +185,12 @@ td.editing .cell-input{display:block;}
     <div class="login-err" id="login-err"></div>
   </div>
 </div>
- 
+
 <div class="loading-overlay hidden" id="loading-overlay">
   <div class="spinner"></div>
   <div class="loading-text">טוען נתונים מ-Google Sheets...</div>
 </div>
- 
+
 <header class="header">
   <div class="brand">
     <div class="brand-icon">HZ</div>
@@ -207,7 +207,7 @@ td.editing .cell-input{display:block;}
     <button class="btn btn-accent" id="btn-new-order"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>הזמנה חדשה</button>
   </div>
 </header>
- 
+
 <main class="main">
   <div class="section-header">
     <div class="section-title"><span>📋</span> דרישות רכש<span class="section-badge badge-purple" id="req-count-badge">0</span></div>
@@ -257,7 +257,7 @@ td.editing .cell-input{display:block;}
       </div>
     </div>
   </div>
- 
+
   <div class="section-header">
     <div class="section-title"><span>📦</span> הזמנות<span class="section-badge badge-blue" id="orders-count-badge">0</span></div>
   </div>
@@ -319,7 +319,7 @@ td.editing .cell-input{display:block;}
     <div id="empty-msg" class="empty" style="display:none"><div class="empty-icon">📦</div><div style="font-size:15px;color:var(--text2)">אין הזמנות</div></div>
     <button class="btn-add-row" id="btn-add-order"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M8 3v10M3 8h10"></path></svg>הוסף הזמנה חדשה</button>
   </div>
- 
+
   <div id="closed-wrap">
     <button class="archive-toggle open" id="closed-toggle-btn">
       <span class="arrow">▼</span><span>הזמנות סגורות / בוטלו</span>
@@ -361,7 +361,7 @@ td.editing .cell-input{display:block;}
     </div>
   </div>
 </main>
- 
+
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <h3>🗑️ מחיקת שורה</h3><p id="confirm-msg"></p>
@@ -369,17 +369,17 @@ td.editing .cell-input{display:block;}
   </div>
 </div>
 <div class="toast" id="toast"></div>
- 
+
 <script>
 var GS_URL='https://script.google.com/macros/s/AKfycbzRAuF--VGlgVX_r62YlgAVqopxxZMoFrp6X9xlrHm2OjUI71CFuOXt_SISUgldxO-H6A/exec';
 var PASSWORD='PFTM7942';
- 
+
 var DEFAULT_REQS=[
   {id:2,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'הירש',quoteNum:'',amount:'2200',currency:'₪',approved:true,handled:false},
   {id:4,requester:'מיכל',project:'Paravascular',desc:'חלקים למערכת זרימה',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית מקצועי',quoteNum:'',amount:'1800',currency:'₪',approved:true,handled:true},
   {id:5,requester:'מיכל',project:'וונסיקה',desc:'טכנאי מדפסת',vendor:'נורטק',quoteNum:'',amount:'525',currency:'₪',approved:true,handled:true},
 ];
- 
+
 var DEFAULT_ORDERS=[
   {id:17,po:'PO26000059',vendor:'נורטק',desc:'עריכה Vensica Product label',project:'Vensica',pm:'',amount:'1,420',currency:'$',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
   {id:22,po:'PO26000064',vendor:'איים סולדר ישראל בע"מ',desc:'חומרי הלחמה',project:'Sonolumi',pm:'',amount:'353',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
@@ -392,14 +392,14 @@ var DEFAULT_ORDERS=[
   {id:31,po:'PO26000071',vendor:'הירש',desc:'חלקים למתקן זרימה',project:'PARAVESCULAR',pm:'',amount:'2200',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'N/A',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
   {id:32,po:'PO26000072',vendor:'ה.ד.ק טכנולוגיות ניפוח זכוכית',desc:'חלקים מזכוכית למתקן זרימה',project:'PARAVESCULAR',pm:'',amount:'1800',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''},
 ];
- 
+
 var reqs=DEFAULT_REQS.slice(),orders=[],activeFilter='all',reqFilter='all';
 var rNid=6,nid=33,pendingDeleteFn=null,archiveOpen=true,closedOpen=true;
 var sortCol=null,sortDir=1,reqSortCol=null,reqSortDir=1;
- 
+
 // ── SYNC ──
 function setSyncStatus(s,m){var p=document.getElementById('sync-pill'),t=document.getElementById('sync-text');p.className='sync-pill '+s;t.textContent=m;}
- 
+
 // ── SAVE ──
 function saveOrders(){
   setSyncStatus('syncing','שומר...');
@@ -411,12 +411,12 @@ function saveOrders(){
     .then(function(d){setSyncStatus(d.ok?'ok':'err',d.ok?'נשמר ✓':'שגיאה');})
     .catch(function(){setSyncStatus('err','אין חיבור');});
 }
- 
+
 function saveReqs(){
   var flat=reqs.map(function(r){return {id:r.id,requester:r.requester||'',project:r.project||'',desc:r.desc||'',vendor:r.vendor||'',quoteNum:r.quoteNum||'',amount:r.amount||'',currency:r.currency||'₪',approved:r.approved?'1':'0',handled:r.handled?'1':'0'};});
   fetch(GS_URL,{method:'POST',body:JSON.stringify({action:'save_reqs',reqs:flat})}).then(function(r){return r.json();}).catch(function(){});
 }
- 
+
 // ── MIGRATE ──
 function migrateOrder(r){
   function toBool(v){return v==='1'||v===1||v==='true'||v===true;}
@@ -434,7 +434,7 @@ function migrateOrder(r){
   var sc=splitAC(f('shipCost'),f('shipCurrency'));
   return {id:Number(f('id'))||0,po:f('po')||'',vendor:f('vendor')||'',quoteNum:f('quoteNum')||'',desc:f('desc')||'',project:f('project')||'',pm:f('pm')||'',amount:ac.a,currency:ac.c,clientApproval:toTriState(f('clientApproval')),sentToVendor:toBool(f('sentToVendor')),deliveryDate:f('deliveryDate')||'',shipResp:f('shipResp')||'',shipCost:sc.a,shipCurrency:sc.c,shipClientApproval:toTriState(f('shipClientApproval')),tracking:f('tracking')||'',arrived:toBool(f('arrived')),qc:toTriState(f('qc')),notes:f('notes')||'',status:f('status')||'פתוח',paid:toBool(f('paid')),clientPaid:toBool(f('clientPaid')),billed:toTriState(f('billed'))};
 }
- 
+
 // ── LOAD ──
 function loadAll(silent){
   if(!silent)document.getElementById('loading-overlay').classList.remove('hidden');
@@ -459,7 +459,7 @@ function loadAll(silent){
         .finally(function(){setSyncStatus('ok','מסונכרן ✓');document.getElementById('loading-overlay').classList.add('hidden');renderAll();});
     });
 }
- 
+
 // ── UI HELPERS ──
 function showConfirm(msg,onYes){document.getElementById('confirm-msg').innerHTML=msg.replace('\n','<br>');pendingDeleteFn=onYes;document.getElementById('confirm-overlay').classList.add('open');}
 function closeConfirm(){document.getElementById('confirm-overlay').classList.remove('open');pendingDeleteFn=null;}
@@ -468,7 +468,7 @@ document.getElementById('confirm-no').addEventListener('click',closeConfirm);
 document.getElementById('confirm-overlay').addEventListener('click',function(e){if(e.target===e.currentTarget)closeConfirm();});
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 function copyText(text){if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){showToast('הועתק ✓');});}else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('הועתק ✓');}}
- 
+
 // ── CELLS ──
 function makeEditCell(val,placeholder,onSave,tbodySelector){
   var td=document.createElement('td');
@@ -490,7 +490,7 @@ function makeEditCell(val,placeholder,onSave,tbodySelector){
   });
   return td;
 }
- 
+
 // ── תאריך עם slash אוטומטי ──
 function makeDateCell(val,onSave,tbodySelector){
   var td=document.createElement('td');
@@ -508,7 +508,7 @@ function makeDateCell(val,onSave,tbodySelector){
   inp.addEventListener('keydown',function(e){if(e.key==='Enter')inp.blur();if(e.key==='Escape'){inp.value=val||'';inp.blur();}});
   return td;
 }
- 
+
 function makeStepBtn(active,onToggle,extraClass){
   var td=document.createElement('td');td.className='step-cell';
   var cls='step-btn'+(active?' done':'')+(active&&extraClass?' '+extraClass:'');
@@ -516,7 +516,7 @@ function makeStepBtn(active,onToggle,extraClass){
   btn.addEventListener('click',function(){onToggle(btn);});
   td.appendChild(btn);return td;
 }
- 
+
 function makeSelectCell(val,options,onSave){
   var td=document.createElement('td');var wrap=document.createElement('div');wrap.className='cell-select-wrap';
   var sel=document.createElement('select');sel.className='cell-select';
@@ -525,7 +525,7 @@ function makeSelectCell(val,options,onSave){
   sel.addEventListener('click',function(e){e.stopPropagation();});
   wrap.appendChild(sel);td.appendChild(wrap);return td;
 }
- 
+
 // ── REQ ROW ──
 function buildReqRow(r){
   var tr=document.createElement('tr');if(r.handled)tr.className='row-done';
@@ -545,13 +545,13 @@ function buildReqRow(r){
   delBtn.addEventListener('click',function(){showConfirm('האם בטוח שרוצה למחוק?\nפעולה זו אינה ניתנת לביטול.',function(){reqs=reqs.filter(function(x){return x.id!==r.id;});saveReqs();renderReqs();showToast('שורה נמחקה');});});
   delTd.appendChild(delBtn);tr.appendChild(delTd);return tr;
 }
- 
+
 // ── SORT/FILTER HELPERS ──
 function parseAmount(s){if(!s)return -Infinity;var n=parseFloat((s+'').replace(/[^0-9.-]/g,''));return isNaN(n)?-Infinity:n;}
 function smartCompare(a,b,col,dir){if(col==='amount'||col==='shipCost')return(parseAmount(a[col])-parseAmount(b[col]))*dir;return((a[col]||'').localeCompare(b[col]||'','he'))*dir;}
 function applyReqSort(list){if(!reqSortCol)return list;return list.slice().sort(function(a,b){return smartCompare(a,b,reqSortCol,reqSortDir);});}
 function applySort(list){if(!sortCol)return list;return list.slice().sort(function(a,b){return smartCompare(a,b,sortCol,sortDir);});}
- 
+
 // ── RENDER REQS ──
 function renderReqs(){
   var q=(document.getElementById('req-search').value||'').toLowerCase();
@@ -570,13 +570,13 @@ function renderReqs(){
   archiveTbody.innerHTML='';
   if(archived.length){archiveWrap.style.display='block';archived.forEach(function(r){archiveTbody.appendChild(buildReqRow(r));});}else{archiveWrap.style.display='none';}
 }
- 
+
 function addReqRow(){
   var r={id:rNid++,requester:'',project:'',desc:'',vendor:'',quoteNum:'',amount:'',currency:'₪',approved:false,handled:false};
   reqs.push(r);saveReqs();renderReqs();
   setTimeout(function(){var rows=document.querySelectorAll('#req-tbody tr');var last=rows[rows.length-1];if(last){var inp=last.querySelector('.cell-input');if(inp){last.querySelector('td').classList.add('editing');inp.focus();}}},30);
 }
- 
+
 // ── ORDERS ──
 function drawDonut(canvas,open,closed,cancelled){
   var ctx=canvas.getContext('2d'),total=open+closed+cancelled||1,segs=[{val:open,color:'#3b6ef5'},{val:closed,color:'#00b896'},{val:cancelled,color:'#e8324f'}];
@@ -584,13 +584,13 @@ function drawDonut(canvas,open,closed,cancelled){
   segs.forEach(function(s){if(!s.val)return;var angle=s.val/total*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+angle);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();start+=angle;});
   ctx.beginPath();ctx.arc(cx,cy,ir,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
 }
- 
+
 function renderStats(){
   var t=orders.length,open=orders.filter(function(o){return o.status==='פתוח';}).length,closed=orders.filter(function(o){return o.status==='סגור';}).length,cancelled=orders.filter(function(o){return o.status==='בוטל';}).length,arrived=orders.filter(function(o){return o.arrived;}).length,paid=orders.filter(function(o){return o.paid;}).length;
   var el=document.getElementById('stats');if(!el)return;
   el.innerHTML='<div class="stat"><div class="stat-label">סה"כ הזמנות</div><div class="stat-value">'+t+'</div></div><div class="stat"><div class="stat-label">פתוחות</div><div class="stat-value accent">'+open+'</div></div><div class="stat"><div class="stat-label">סגורות</div><div class="stat-value success">'+closed+'</div></div><div class="stat"><div class="stat-label">בוטלו</div><div class="stat-value danger">'+cancelled+'</div></div><div class="stat"><div class="stat-label">התקבלו</div><div class="stat-value success">'+arrived+'</div></div><div class="stat"><div class="stat-label">שולם ✓</div><div class="stat-value accent">'+paid+'</div></div><div class="stat"><div class="stat-label">טרם שולם</div><div class="stat-value danger">'+(t-paid)+'</div></div>';
 }
- 
+
 function renderDashboard(){
   var projects={};
   orders.forEach(function(o){var p=o.project||'ללא פרויקט';if(!projects[p])projects[p]={open:0,closed:0,cancelled:0};if(o.status==='סגור')projects[p].closed++;else if(o.status==='בוטל')projects[p].cancelled++;else projects[p].open++;});
@@ -608,7 +608,7 @@ function renderDashboard(){
     card.appendChild(donutWrap);card.appendChild(info);dash.appendChild(card);
   });
 }
- 
+
 function buildOrderRow(o){
   var tr=document.createElement('tr');tr.className='row-'+(o.status||'פתוח');
   var poTd=makeEditCell(o.po,'PO',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.po=v;saveOrders();}},'#tbody,#closed-tbody');
@@ -650,7 +650,7 @@ function buildOrderRow(o){
   var div=document.createElement('div');div.className='row-actions';div.appendChild(delBtn);acTd.appendChild(div);tr.appendChild(acTd);
   return tr;
 }
- 
+
 function addOrderRow(){
   var o={id:nid++,po:'',vendor:'',quoteNum:'',desc:'',project:'',pm:'',amount:'',currency:'₪',clientApproval:'',sentToVendor:false,deliveryDate:'',shipResp:'',shipCost:'',shipCurrency:'₪',shipClientApproval:'',tracking:'',arrived:false,qc:'',notes:'',status:'פתוח',paid:false,clientPaid:false,billed:''};
   orders.push(o);
@@ -660,7 +660,7 @@ function addOrderRow(){
   saveOrders();renderAll();
   setTimeout(function(){var rows=document.querySelectorAll('#tbody tr');var last=rows[rows.length-1];if(last){last.scrollIntoView({block:'center',behavior:'smooth'});var inp=last.querySelector('.cell-input');if(inp){last.querySelector('td').classList.add('editing');inp.focus();}}},60);
 }
- 
+
 function renderTable(){
   var q=document.getElementById('search').value.toLowerCase();
   var active=orders.filter(function(o){return o.status!=='סגור'&&o.status!=='בוטל';});
@@ -676,9 +676,9 @@ function renderTable(){
   document.getElementById('closed-count-badge').textContent=closed.length;
   document.getElementById('closed-wrap').style.display=closed.length?'block':'none';
 }
- 
+
 function renderAll(){document.getElementById('orders-count-badge').textContent=orders.length;renderStats();renderDashboard();renderTable();renderReqs();}
- 
+
 function exportXLSX(){
   var rH=['שם המבקש','פרויקט','תיאור כללי','ספק',"מס' הצעת מחיר",'סכום','מטבע','אישור לקוח','סטטוס'];
   var rR=reqs.map(function(r){return[r.requester,r.project,r.desc,r.vendor,r.quoteNum||'',r.amount,r.currency||'₪',r.approved?'מאושר':'ממתין',r.handled?'טופל':'פעיל'];});
@@ -689,7 +689,7 @@ function exportXLSX(){
   var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws1,'דרישות רכש');XLSX.utils.book_append_sheet(wb,ws2,'הזמנות');
   XLSX.writeFile(wb,'מעקב_הזמנות_לקוחות.xlsx');showToast('Excel יוצא בהצלחה ✓');
 }
- 
+
 // ── EVENTS ──
 document.getElementById('btn-refresh').addEventListener('click',function(){loadAll(false);});
 document.getElementById('btn-export').addEventListener('click',exportXLSX);
@@ -739,7 +739,7 @@ document.getElementById('btn-download-src').addEventListener('click',function(){
   var blob=new Blob([html],{type:'text/html;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();URL.revokeObjectURL(a.href);showToast('הקובץ הורד ✓');
 });
- 
+
 // ── LOGIN ──
 function checkLogin(){
   if(document.getElementById('login-input').value===PASSWORD){
