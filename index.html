@@ -59,11 +59,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .search-box input{background:none;border:none;outline:none;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text);width:220px;padding:8px 0;}
 .search-box input::placeholder{color:var(--text3);}
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem;}
-.tbl-wrap{overflow-x:auto;}
+.tbl-wrap{overflow-x:auto;overflow-y:auto;max-height:60vh;}
 table{width:100%;border-collapse:collapse;}
  
 /* ── STICKY HEADERS ── */
-.orders-tbl thead{position:sticky;top:64px;z-index:10;}
+.orders-tbl thead{position:sticky;top:0;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.06);}
 .orders-tbl thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
 .orders-tbl thead tr:first-child th.group-process{color:var(--accent);background:rgba(59,110,245,0.05);}
 .orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
@@ -115,7 +115,7 @@ td.editing .cell-input{display:block;}
 .row-actions{display:flex;gap:4px;justify-content:flex-end;padding:0 6px;}
 .req-table{min-width:1050px;table-layout:fixed;width:100%;}
 .req-table td{overflow:hidden;}
-.req-table thead{position:sticky;top:64px;z-index:10;}
+.req-table thead{position:sticky;top:0;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.06);}
 .req-table thead tr th{background:rgba(124,77,255,0.06);font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#7c4dff;padding:10px;border-bottom:1px solid var(--border);text-align:right;border-left:1px solid var(--border);}
 .req-table thead tr th:last-child{border-left:none;}
 .archive-toggle{width:100%;padding:10px 16px;border:none;background:var(--surface2);font-family:'Heebo',sans-serif;font-size:13px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background 0.15s;}
@@ -166,7 +166,7 @@ td.editing .cell-input{display:block;}
 .sort-arrow{font-size:9px;color:var(--text3);margin-right:2px;}
 .sort-arrow.asc::after{content:'↑';}
 .sort-arrow.desc::after{content:'↓';}
-.tbl-wrap::-webkit-scrollbar{height:10px;}
+.tbl-wrap::-webkit-scrollbar{height:10px;width:8px;}
 .tbl-wrap::-webkit-scrollbar-track{background:var(--surface3);border-radius:5px;}
 .tbl-wrap::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.3);border-radius:5px;}
 .tbl-wrap::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.5);}
