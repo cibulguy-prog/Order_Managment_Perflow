@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="he" dir="rtl"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -736,6 +737,27 @@ function renderPayment(){
 function renderAll(){document.getElementById('orders-count-badge').textContent=orders.length;renderStats();renderDashboard();renderTable();renderReqs();renderPayment();}
 
 function exportXLSX(){
+  if(typeof XLSX==='undefined'){
+    var sc=document.createElement('script');
+    sc.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    sc.onload=function(){try{doExportXLSX();}catch(e){exportCSVFallback();}};
+    sc.onerror=function(){exportCSVFallback();};
+    document.head.appendChild(sc);
+    return;
+  }
+  try{doExportXLSX();}catch(e){console.error(e);exportCSVFallback();}
+}
+function exportCSVFallback(){
+  var oH=['PO','ספק','מס הצעה','תיאור','פרויקט','מנהל פרויקט','סכום','מטבע','אישור לקוח','שליחה לספק','תאריך אספקה','משלוח באחריות','עלות משלוח','מטבע משלוח','אישור לקוח משלוח','מספר מעקב','קבלת סחורה','QC','לקוח חוייב','עלה לדוקה','לקוח שילם','הערות','סטטוס'];
+  var oR=orders.map(function(o){return[o.po,o.vendor,o.quoteNum||'',o.desc,o.project,o.pm||'',o.amount,o.currency||'₪',o.clientApproval||'',o.sentToVendor?'✓':'',o.deliveryDate||'',o.shipResp||'',o.shipCost||'',o.shipCurrency||'₪',o.shipClientApproval||'',o.tracking||'',o.arrived?'✓':'',o.qc||'',o.billed||'',o.paid?'✓':'',o.clientPaid?'✓':'',o.notes||'',o.status||'פתוח'];});
+  var esc=function(v){v=(v===undefined||v===null)?'':String(v);return '"'+v.replace(/"/g,'""')+'"';};
+  var csv=[oH].concat(oR).map(function(r){return r.map(esc).join(',');}).join('\r\n');
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='מעקב_הזמנות.csv';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+  showToast('ספריית Excel לא נטענה, יוצא קובץ CSV ✓');
+}
+function doExportXLSX(){
   var rH=['שם המבקש','פרויקט','תיאור כללי','ספק',"מס' הצעת מחיר",'סכום','מטבע','אישור לקוח','סטטוס'];
   var rR=reqs.map(function(r){return[r.requester,r.project,r.desc,r.vendor,r.quoteNum||'',r.amount,r.currency||'₪',r.approved?'מאושר':'ממתין',r.handled?'טופל':'פעיל'];});
   var ws1=XLSX.utils.aoa_to_sheet([rH].concat(rR));
