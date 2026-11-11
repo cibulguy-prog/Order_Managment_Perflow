@@ -63,17 +63,19 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 table{width:100%;border-collapse:collapse;}
 
 /* ── STICKY HEADERS ── */
-.orders-tbl thead{position:sticky;top:0;z-index:10;will-change:transform;}.orders-tbl thead tr:first-child th{position:sticky;top:0;z-index:11;}.orders-tbl thead tr:last-child th{position:sticky;top:35px;z-index:11;box-shadow:0 2px 4px rgba(0,0,0,0.06);}
+.orders-tbl thead th{position:sticky;top:0;z-index:20;}.orders-tbl thead tr:first-child th{height:35px;box-sizing:border-box;}.orders-tbl thead tr:last-child th{top:35px;box-shadow:0 2px 4px rgba(0,0,0,0.06);}
 .orders-tbl thead tr:first-child th{background:var(--surface2);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;}
-.orders-tbl thead tr:first-child th.group-process{color:var(--accent);background:rgba(59,110,245,0.05);}
-.orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:rgba(0,184,150,0.05);}
-.orders-tbl thead tr:first-child th.group-status{color:var(--warn);background:rgba(232,150,10,0.05);}
+.orders-tbl thead tr:first-child th.group-process{color:var(--accent);background:linear-gradient(rgba(59,110,245,0.05),rgba(59,110,245,0.05)),var(--surface2);}
+.orders-tbl thead tr:first-child th.group-ship{color:var(--accent2);background:linear-gradient(rgba(0,184,150,0.05),rgba(0,184,150,0.05)),var(--surface2);}
+.orders-tbl thead tr:first-child th.group-status{color:var(--warn);background:linear-gradient(rgba(232,150,10,0.05),rgba(232,150,10,0.05)),var(--surface2);}
 .orders-tbl thead tr:last-child th{background:var(--surface2);text-align:right;padding:8px 10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;}
 
 /* ── STICKY FIRST 2 COLUMNS ── */
-.orders-tbl th:nth-child(1),.orders-tbl td:nth-child(1){position:sticky;right:0;z-index:5;background:var(--surface);box-shadow:-2px 0 4px rgba(0,0,0,0.06);}
-.orders-tbl th:nth-child(2),.orders-tbl td:nth-child(2){position:sticky;right:130px;z-index:5;background:var(--surface);}
-.orders-tbl thead th:nth-child(1),.orders-tbl thead th:nth-child(2){z-index:11;background:var(--surface2);}
+.orders-tbl tbody td:nth-child(1){position:sticky;right:0;z-index:5;background:var(--surface);width:130px;min-width:130px;max-width:130px;}
+.orders-tbl tbody td:nth-child(2){position:sticky;right:130px;z-index:5;background:var(--surface);box-shadow:-2px 0 4px rgba(0,0,0,0.06);}
+.orders-tbl thead tr:last-child th:nth-child(1){right:0;z-index:30;width:130px;min-width:130px;max-width:130px;}
+.orders-tbl thead tr:last-child th:nth-child(2){right:130px;z-index:30;box-shadow:-2px 2px 4px rgba(0,0,0,0.06);}
+.orders-tbl thead tr:first-child th.group-frozen{right:0;z-index:30;}
 tbody tr.row-סגור td:nth-child(1),tbody tr.row-סגור td:nth-child(2){background:rgba(0,184,150,0.06)!important;}
 tbody tr.row-בוטל td:nth-child(1),tbody tr.row-בוטל td:nth-child(2){background:rgba(232,50,79,0.05)!important;}
 
@@ -268,7 +270,7 @@ td.editing .cell-input{display:block;}
         <table class="orders-tbl" style="min-width:1800px">
           <thead>
             <tr>
-              <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
+              <th colspan="2" class="group-frozen" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th><th colspan="6" style="background:var(--surface2)"></th>
               <th colspan="3" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
               <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
               <th colspan="6" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
@@ -320,7 +322,7 @@ td.editing .cell-input{display:block;}
       <table id="orders-table" class="orders-tbl" style="min-width:1800px">
         <thead>
           <tr>
-            <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
+            <th colspan="2" class="group-frozen" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th><th colspan="6" style="background:var(--surface2)"></th>
             <th colspan="3" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
             <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
             <th colspan="7" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
@@ -370,7 +372,7 @@ td.editing .cell-input{display:block;}
         <table class="orders-tbl" style="min-width:1800px">
           <thead>
             <tr>
-              <th colspan="8" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th>
+              <th colspan="2" class="group-frozen" style="background:var(--surface2);color:var(--text3)">פרטי הזמנה</th><th colspan="6" style="background:var(--surface2)"></th>
               <th colspan="3" class="group-process" style="border-right:1px solid rgba(59,110,245,0.15)">תהליך רכש</th>
               <th colspan="6" class="group-ship" style="border-right:1px solid rgba(0,184,150,0.15)">משלוח</th>
               <th colspan="7" class="group-status" style="border-right:1px solid rgba(232,150,10,0.15)">סיום</th>
