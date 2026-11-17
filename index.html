@@ -689,7 +689,6 @@ function buildOrderRow(o){
     if(!ord)return;
     ord.clientPaid=!ord.clientPaid;
     btn.className='step-btn'+(ord.clientPaid?' done client-paid-style':'');
-    if(ord.clientPaid){ord.status='סגור';showToast('הועבר לארכיון ✓');}
     saveOrders();renderAll();
   },'client-paid-style'));
   tr.appendChild(makeEditCell(o.notes,'הערות',function(v){var ord=orders.find(function(x){return x.id===o.id;});if(ord){ord.notes=v;saveOrders();}},'#tbody,#closed-tbody'));
@@ -728,7 +727,7 @@ function renderTable(){
 }
 
 function renderPayment(){
-  var inPayment=orders.filter(function(o){return o.paid&&!o.clientPaid&&o.status!=='סגור'&&o.status!=='בוטל';});
+  var inPayment=orders.filter(function(o){return o.paid&&o.status!=='סגור'&&o.status!=='בוטל';});
   var wrap=document.getElementById('payment-wrap');
   var tbody=document.getElementById('payment-tbody');
   tbody.innerHTML='';
